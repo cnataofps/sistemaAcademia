@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Lista de Avaliações Físicas</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.sidebar .nav-link {
+			display: flex;
+			align-items: center;
+			padding: 1rem 1.5rem;
+			color: #495057;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.sidebar .nav-link i {
+			margin-right: 10px;
+			font-size: 1.2rem;
+		}
+
+		.sidebar .nav-link:hover {
+			background-color: #e9ecef;
+			color: #0d6efd;
+			transform: translateX(4px);
+		}
+
+		.sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h3,
+		body.dark-mode label,
+		body.dark-mode th,
+		body.dark-mode td,
+		body.dark-mode .form-label,
+		body.dark-mode .form-check-label {
+			color: #e0e0e0 !important;
+		}
+
+		body.dark-mode .form-control,
+		body.dark-mode .form-select {
+			background-color: #2a2a2a !important;
+			color: #e0e0e0 !important;
+			border-color: #555 !important;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa !important;
+		}
+
+		body.dark-mode .btn-primary {
+			background-color: #0d6efd !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .btn-secondary {
+			background-color: #6c757d !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .btn-warning {
+			background-color: #ffc107 !important;
+			color: #212529 !important;
+		}
+
+		body.dark-mode .btn-danger {
+			background-color: #dc3545 !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .table {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .table-striped>tbody>tr:nth-of-type(odd) {
+			background-color: #1f1f1f;
+		}
+
+		body.dark-mode .table-light {
+			background-color: #333;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .alert-info {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #444;
+		}
+
+		/* Transições suaves */
+		.card,
+		.form-control,
+		.btn,
+		.table,
+		.alert {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+
+		<!-- Área de conteúdo -->
+		<div class="content-area">
+			<div class="container">
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h3 class="mb-0">Lista de Avaliações Físicas</h3>
+
+					<div class="d-flex gap-2">
+						<!-- Buscar por nome -->
+						<form th:action="@{/buscarAvaliacoesFisica}" method="get" class="d-flex">
+							<input type="text" name="nome" class="form-control" placeholder="Buscar por nome do aluno"
+								required>
+							<button type="submit" class="btn btn-primary ms-2">Buscar</button>
+						</form>
+
+						<!-- Buscar por ID -->
+						<form
+							onsubmit="event.preventDefault(); window.location.href='/avaliacoesFisica/' + document.getElementById('idBuscar').value;"
+							class="d-flex">
+							<input type="number" id="idBuscar" class="form-control" placeholder="Buscar por ID"
+								required>
+							<button type="submit" class="btn btn-secondary ms-2">Buscar</button>
+						</form>
+					</div>
+				</div>
+
+				<!-- Tabela de avaliações -->
+				<div class="table-responsive">
+					<table class="table table-striped align-middle">
+						<thead class="table-light">
+							<tr>
+								<th>ID</th>
+								<th>Aluno</th>
+								<th>Peso</th>
+								<th>Altura</th>
+								<th>Data</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="avaliacao : ${avaliacoes}">
+								<td th:text="${avaliacao.id}">ID</td>
+								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.nome : 'Aluno não definido'}">
+									Aluno</td>
+								<td th:text="${avaliacao.peso}">Peso</td>
+								<td th:text="${#numbers.formatDecimal(avaliacao.altura, 1, 2)}">Altura</td>
+								<td th:text="${avaliacao.data}">Data</td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- Mensagem de feedback -->
+				<div th:if="${Mensagem}" class="mt-3">
+					<div class="alert alert-info" th:text="${Mensagem}"></div>
+				</div>
+
+				<!-- Botão Voltar -->
+				<div class="mt-4">
+					<a href="/controleAvaliacaoFisica" class="btn btn-outline-secondary">
+						<i class="bi bi-arrow-left-circle"></i> Voltar
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const body = document.body;
+			const toggle = document.getElementById('toggleDarkMode');
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

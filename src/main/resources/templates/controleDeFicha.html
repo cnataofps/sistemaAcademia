@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Controle de Ficha de Treino</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.sidebar .nav-link {
+			display: flex;
+			align-items: center;
+			padding: 1rem 1.5rem;
+			color: #495057;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.sidebar .nav-link i {
+			margin-right: 10px;
+			font-size: 1.2rem;
+		}
+
+		.sidebar .nav-link:hover {
+			background-color: #e9ecef;
+			color: #0d6efd;
+			transform: translateX(4px);
+		}
+
+		.sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container,
+		body.dark-mode .card {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h2,
+		body.dark-mode label,
+		body.dark-mode .form-label,
+		body.dark-mode .text-muted {
+			color: #e0e0e0 !important;
+		}
+
+		body.dark-mode .form-control {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #555;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa;
+		}
+
+		body.dark-mode .btn-success,
+		body.dark-mode .btn-info,
+		body.dark-mode .btn-warning,
+		body.dark-mode .btn-danger {
+			color: #fff;
+		}
+
+		body.dark-mode .btn-outline-secondary {
+			border-color: #ccc;
+			color: #ccc;
+		}
+
+		body.dark-mode .btn-outline-secondary:hover {
+			background-color: #ccc;
+			color: #121212;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+
+		<!-- Área de conteúdo -->
+		<div class="content-area">
+			<div class="container">
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h2 class="card-title text-primary mb-4">
+							<i class="bi bi-journal-text"></i> Controle de Ficha de Treino
+						</h2>
+
+						<div class="d-grid gap-3 mb-4">
+							<button onclick="window.location.href='/cadastrarFicha'" type="button"
+								class="btn btn-success btn-lg">
+								<i class="bi bi-plus-circle-fill"></i> Cadastrar Ficha de Treino
+							</button>
+
+							<button onclick="window.location.href='/listarFichas'" type="button"
+								class="btn btn-info btn-lg">
+								<i class="bi bi-list-check"></i> Listar Fichas de Treino
+							</button>
+						</div>
+
+						<div class="row g-4">
+							<div class="col-md-6">
+								<form
+									onsubmit="event.preventDefault(); window.location.href='/editarFicha/' + document.getElementById('idEditar').value;">
+									<label for="idEditar" class="form-label">Editar Ficha por ID</label>
+									<div class="input-group">
+										<input type="number" id="idEditar" class="form-control"
+											placeholder="Digite o ID do aluno" required />
+										<button type="submit" class="btn btn-warning">
+											<i class="bi bi-pencil-square"></i> Editar
+										</button>
+									</div>
+								</form>
+							</div>
+
+							<div class="col-md-6">
+								<form
+									onsubmit="event.preventDefault(); window.location.href='/deletarFicha/' + document.getElementById('idExcluir').value;">
+									<label for="idExcluir" class="form-label">Excluir Ficha por ID</label>
+									<div class="input-group">
+										<input type="number" id="idExcluir" class="form-control"
+											placeholder="Digite o ID do aluno" required />
+										<button type="submit" class="btn btn-danger">
+											<i class="bi bi-trash-fill"></i> Excluir
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<hr class="mt-4">
+						<p class="text-muted">Utilize os botões acima para gerenciar as fichas de treino dos alunos
+							cadastrados.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		window.addEventListener('load', function () {
+			const body = document.body;
+			const toggle = document.getElementById('toggleDarkMode');
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

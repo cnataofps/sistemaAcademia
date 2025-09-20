@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Editar Aluno</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.sidebar .nav-link {
+			display: flex;
+			align-items: center;
+			padding: 1rem 1.5rem;
+			color: #495057;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.sidebar .nav-link i {
+			margin-right: 10px;
+			font-size: 1.2rem;
+		}
+
+		.sidebar .nav-link:hover {
+			background-color: #e9ecef;
+			color: #0d6efd;
+			transform: translateX(4px);
+		}
+
+		.sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h1,
+		body.dark-mode label {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-control {
+			background-color: #2a2a2a !important;
+			color: #e0e0e0 !important;
+			border-color: #555 !important;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa !important;
+		}
+
+		body.dark-mode .btn-primary {
+			background-color: #0d6efd !important;
+			color: #fff !important;
+			border-color: #0d6efd !important;
+		}
+
+		body.dark-mode .btn-outline-secondary {
+			background-color: transparent !important;
+			border-color: #ccc !important;
+			color: #ccc !important;
+		}
+
+		body.dark-mode .btn-outline-secondary:hover {
+			background-color: #ccc !important;
+			color: #121212 !important;
+		}
+
+		body.dark-mode i.bi {
+			color: #e0e0e0 !important;
+		}
+
+		.form-control,
+		.btn {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+
+		<!-- Área de conteúdo -->
+		<div class="content-area">
+			<h1>Editar Aluno</h1>
+			<hr>
+
+			<form method="POST" th:action="@{'/editarAlunos/' + ${aluno.id}}">
+				<div class="row">
+					<div class="form-group col-12 col-md-6">
+						<label for="matricula">Matrícula</label>
+						<input type="text" name="matricula" class="form-control" id="matricula"
+							placeholder="Digite a matrícula do aluno" th:value="${aluno.matricula}" required>
+					</div>
+					<div class="form-group col-12 col-md-6">
+						<label for="nome">Nome</label>
+						<input type="text" name="nome" class="form-control" id="nome" placeholder="Digite seu nome"
+							th:value="${aluno.nome}" required>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="form-group col-12 col-md-6">
+						<label for="cpf">CPF</label>
+						<input type="text" name="cpf" class="form-control" id="cpf" placeholder="Digite seu CPF"
+							th:value="${aluno.cpf}" required>
+					</div>
+					<div class="form-group col-12 col-md-6">
+						<label for="dataNasc">Data de Nascimento</label>
+						<input type="date" name="dataNasc" class="form-control" id="dataNasc"
+							th:value="${#dates.format(aluno.dataNasc, 'yyyy-MM-dd')}" required>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="form-group col-12 col-md-6">
+						<label for="profissao">Profissão</label>
+						<input type="text" name="profissao" class="form-control" id="profissao"
+							placeholder="Digite sua profissão" th:value="${aluno.profissao}" required>
+					</div>
+					<div class="form-group col-12 col-md-6">
+						<label for="endereco">Endereço</label>
+						<input type="text" name="endereco" class="form-control" id="endereco"
+							placeholder="Digite seu endereço" th:value="${aluno.endereco}" required>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="form-group col-12 col-md-6">
+						<label for="email">E-mail</label>
+						<input type="email" name="email" class="form-control" id="email" placeholder="Digite seu e-mail"
+							th:value="${aluno.email}" required>
+					</div>
+					<div class="form-group col-12 col-md-6">
+						<label for="senha">Senha</label>
+						<input type="password" name="senha" class="form-control" id="senha"
+							placeholder="Digite sua senha">
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="form-group col-12 col-md-6">
+						<label for="confirmarSenha">Confirmar Senha</label>
+						<input type="password" name="confirmarSenha" class="form-control" id="confirmarSenha"
+							placeholder="Confirme sua senha">
+					</div>
+				</div>
+
+				<div class="d-flex flex-wrap gap-3 mt-4">
+					<button type="submit" class="btn btn-primary btn-lg">Atualizar Aluno</button>
+					<a href="/controleAluno" class="btn btn-outline-secondary btn-lg">Voltar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

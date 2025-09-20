@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="header">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AUTOMIND - Seu aplicativo inteligente</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		.navbar {
+			background: linear-gradient(90deg, #0d6efd 0%, #6610f2 100%);
+			color: white;
+			width: 100%;
+			padding: 1rem;
+		}
+
+		.navbar .navbar-brand {
+			color: white;
+			font-weight: 600;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.sidebar .nav-link {
+			display: flex;
+			align-items: center;
+			padding: 1rem 1.5rem;
+			color: #495057;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.sidebar .nav-link i {
+			margin-right: 10px;
+			font-size: 1.2rem;
+		}
+
+		.sidebar .nav-link:hover {
+			background-color: #e9ecef;
+			color: #0d6efd;
+			transform: translateX(4px);
+		}
+
+		.sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		.container {
+			max-width: 960px;
+			margin: 0 auto;
+		}
+
+		.card {
+			background-color: #f8f9fa;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		.dark-mode .navbar {
+			background: linear-gradient(90deg, #212529 0%, #343a40 100%);
+		}
+
+		.dark-mode .navbar .navbar-brand,
+		.dark-mode .btn-outline-light {
+			color: #f8f9fa;
+		}
+
+		.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.dark-mode .content-area,
+		.dark-mode .card {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg" th:fragment="navbar">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">AUTOMIND App</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto align-items-center">
+					<li class="nav-item">
+						<button id="toggleDarkMode" class="btn btn-outline-light me-3">
+							<i class="bi bi-moon-stars-fill"></i> Modo Noturno
+						</button>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle btn btn-secondary text-white" href="#"
+							id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							Olá, <span th:text="${nome}">Usuário</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+							<li><a class="dropdown-item" href="/alterarDados"><i class="bi bi-gear"></i> Alterar Dados</a></li>
+							<li><a class="dropdown-item" href="/configuracoes"><i class="bi bi-gear"></i> Configurações</a></li>
+							<li><a class="dropdown-item" href="/atualizacoes"><i class="bi bi-arrow-repeat"></i> Atualizações</a></li>
+							<li><a class="dropdown-item" href="/suporte"><i class="bi bi-life-preserver"></i> Suporte</a></li>
+							<li><a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-right"></i> Sair</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="sidebar" th:fragment="sidebar">
+		<ul>
+			<!-- Visível para todos -->
+			<li><a class="nav-link active" href="/"><i class="bi bi-house-door-fill"></i> Dashboard</a></li>
+
+			<!-- ADMIN e PROFESSOR -->
+			<li sec:authorize="hasAnyRole('ADMIN','PROFESSOR')">
+				<a class="nav-link" href="/controleAluno"><i class="bi bi-people-fill"></i> Alunos</a>
+			</li>
+			<li sec:authorize="hasAnyRole('ADMIN','PROFESSOR')">
+				<a class="nav-link" href="/controleDeFicha"><i class="bi bi-journal-text"></i> Ficha de Treino</a>
+			</li>
+			<li sec:authorize="hasAnyRole('ADMIN','PROFESSOR')">
+				<a class="nav-link" href="/controleAvaliacaoFisica"><i class="bi bi-clipboard-pulse"></i> Avaliação
+					Física</a>
+
+			</li>
+			<!-- Somente ADMIN -->
+			<li sec:authorize="hasRole('ADMIN')">
+				<a class="nav-link" href="/listarSuporte"><i class="bi bi-clipboard-pulse"></i> Lista Suporte</a>
+			</li>
+			<!-- Somente ALUNO -->
+			<li sec:authorize="hasRole('ALUNO')">
+				<a class="nav-link" href="/minhaFicha"><i class="bi bi-journal-text"></i> Minha Ficha</a>
+			</li>
+			<li sec:authorize="hasRole('ALUNO')">
+				<a class="nav-link" href="/minhaAvaliacao"><i class="bi bi-clipboard-pulse"></i> Minha Avaliação</a>
+			</li>
+
+		</ul>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

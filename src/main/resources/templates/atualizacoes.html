@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="painel :: header">
+	<meta charset="UTF-8">
+	<title>Atualizações</title>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="painel :: navbar"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="painel :: sidebar" class="sidebar"></div>
+
+		<!-- Conteúdo -->
+		<div class="content-area">
+			<h2 class="mb-4">🔄 Atualizações do Sistema</h2>
+
+			<ul class="list-group">
+				<li class="list-group-item">✅ Novo módulo de avaliação física integrado</li>
+				<li class="list-group-item">✅ Melhorias na interface de cadastro de fichas</li>
+				<li class="list-group-item">✅ Correções de bugs na listagem de alunos</li>
+				<li class="list-group-item">✅ Otimização de desempenho no painel administrativo</li>
+				<li class="list-group-item">✅ Correcao de bugs na lista de Treino</li>
+			</ul>
+
+			<p class="mt-3 text-muted">Última atualização: 16 de setembro de 2025</p>
+		</div>
+	</div>
+
+	<!-- Estilos adicionais para modo noturno -->
+	<style>
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .list-group-item {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #444;
+		}
+
+		body.dark-mode .text-muted {
+			color: #b0b0b0 !important;
+		}
+
+		body.dark-mode h2 {
+			color: #66b2ff;
+		}
+
+		body.dark-mode {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		.list-group-item {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+
+	<!-- Script de modo noturno -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+
+			// Aplica tema salvo
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			// Ativa/desativa modo noturno
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

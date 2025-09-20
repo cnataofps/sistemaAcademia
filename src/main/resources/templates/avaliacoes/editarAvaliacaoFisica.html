@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>✏️ Editar Avaliação Física</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h1,
+		body.dark-mode label {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-control {
+			background-color: #2a2a2a !important;
+			color: #e0e0e0 !important;
+			border-color: #555 !important;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa !important;
+		}
+
+		body.dark-mode .btn-primary {
+			background-color: #0d6efd !important;
+			color: #fff !important;
+			border-color: #0d6efd !important;
+		}
+
+		body.dark-mode .btn-outline-secondary {
+			background-color: transparent !important;
+			border-color: #ccc !important;
+			color: #ccc !important;
+		}
+
+		body.dark-mode .btn-outline-secondary:hover {
+			background-color: #ccc !important;
+			color: #121212 !important;
+		}
+
+		body.dark-mode i.bi {
+			color: #e0e0e0 !important;
+		}
+
+		.form-control,
+		.btn {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+
+		<!-- Área de conteúdo -->
+		<div class="content-area">
+			<div class="container">
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h2 class="card-title text-warning mb-4">
+							<i class="bi bi-pencil-square"></i> Editar Avaliação Física
+						</h2>
+
+						<!-- ✅ Mensagem de sucesso -->
+						<div th:if="${Mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+							<span th:text="${Mensagem}"></span>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+
+						<form method="POST" th:action="@{/editarAvaliacaoFisica/{id}(id=${avaliacaoFisica.id})}"
+							th:object="${avaliacaoFisica}">
+							<input type="hidden" th:field="*{id}" />
+
+							<!-- Dados gerais -->
+							<div class="row g-3 mb-4">
+								<div class="col-md-6">
+									<label class="form-label">Data</label>
+									<input type="date" th:field="*{data}" class="form-control" required>
+								</div>
+								<div class="row g-3 mb-4">
+									<div class="col-md-6">
+										<label class="form-label">Data Troca</label>
+										<input type="date" th:field="*{dataTroca}" class="form-control" required>
+									</div>
+									<div class="col-md-6">
+										<label class="form-label">Objetivo</label>
+										<input type="text" th:field="*{objetivo}" class="form-control">
+									</div>
+								</div>
+
+								<!-- Abas -->
+								<ul class="nav nav-tabs mb-3" role="tablist">
+									<li class="nav-item"><button class="nav-link active" data-bs-toggle="tab"
+											data-bs-target="#perimetria" type="button"><i class="bi bi-rulers"></i>
+											Perimetria</button></li>
+									<li class="nav-item"><button class="nav-link" data-bs-toggle="tab"
+											data-bs-target="#antropometria" type="button"><i
+												class="bi bi-body-text"></i>
+											Antropometria</button></li>
+									<li class="nav-item"><button class="nav-link" data-bs-toggle="tab"
+											data-bs-target="#anamnese" type="button"><i
+												class="bi bi-journal-medical"></i>
+											Anamnese</button></li>
+								</ul>
+
+								<div class="tab-content">
+									<!-- Perimetria -->
+									<div class="tab-pane fade show active" id="perimetria">
+										<div class="row g-3">
+											<div class="col-md-6"><label>Torax</label><input type="text"
+													th:field="*{torax}" class="form-control"></div>
+											<div class="col-md-6"><label>Abdominal</label><input type="text"
+													th:field="*{abdominal}" class="form-control"></div>
+											<div class="col-md-6"><label>Quadril</label><input type="text"
+													th:field="*{quadril}" class="form-control"></div>
+											<div class="col-md-6"><label>Antebraço</label><input type="text"
+													th:field="*{antebraco}" class="form-control"></div>
+											<div class="col-md-6"><label>Braço Relaxado</label><input type="text"
+													th:field="*{bracorelaxado}" class="form-control"></div>
+											<div class="col-md-6"><label>Braço Contraído</label><input type="text"
+													th:field="*{bracocontraido}" class="form-control"></div>
+											<div class="col-md-6"><label>Coxa Superior</label><input type="text"
+													th:field="*{coxasuperior}" class="form-control"></div>
+											<div class="col-md-6"><label>Panturilha</label><input type="text"
+													th:field="*{panturilha}" class="form-control"></div>
+										</div>
+									</div>
+
+									<!-- Antropometria -->
+									<div class="tab-pane fade" id="antropometria">
+										<div class="row g-3 mt-3">
+											<div class="col-md-6"><label>Tricipal</label><input type="text"
+													th:field="*{tricipal}" class="form-control"></div>
+											<div class="col-md-6"><label>Subescapular</label><input type="text"
+													th:field="*{subescapular}" class="form-control"></div>
+											<div class="col-md-6"><label>Peitoral</label><input type="text"
+													th:field="*{peitoral}" class="form-control"></div>
+											<div class="col-md-6"><label>Abdômen</label><input type="text"
+													th:field="*{abdomen}" class="form-control"></div>
+											<div class="col-md-6"><label>Supra-ilíaca</label><input type="text"
+													th:field="*{suprailiaca}" class="form-control"></div>
+											<div class="col-md-6"><label>Coxa</label><input type="text"
+													th:field="*{coxa}" class="form-control"></div>
+											<div class="col-md-6"><label>Axilar Média</label><input type="text"
+													th:field="*{axialmedia}" class="form-control"></div>
+											<div class="col-md-6"><label>Peso</label><input type="text"
+													th:field="*{peso}" class="form-control"></div>
+											<div class="col-md-6"><label>Altura</label><input type="text"
+													th:field="*{altura}" class="form-control"></div>
+											<div class="col-md-6"><label>IMC</label><input type="text" th:field="*{imc}"
+													class="form-control"></div>
+											<div class="col-md-6"><label>% Gordura</label><input type="text"
+													th:field="*{percentualgordura}" class="form-control"></div>
+											<div class="col-md-6"><label>Massa Magra</label><input type="text"
+													th:field="*{massamagra}" class="form-control"></div>
+											<div class="col-md-6"><label>Massa Gorda</label><input type="text"
+													th:field="*{massagorda}" class="form-control"></div>
+										</div>
+									</div>
+
+									<!-- Anamnese -->
+									<div class="tab-pane fade" id="anamnese">
+										<div class="row g-4 mt-3">
+											<!-- Histórico Pessoal -->
+											<div class="col-12">
+												<h5 class="text-primary">Histórico Pessoal</h5>
+												<label>Problema articular:</label>
+												<input type="radio" th:field="*{problemaArticular}" value="sim"> Sim
+												<input type="radio" th:field="*{problemaArticular}" value="nao"> Não
+												<label>Cirurgia:</label>
+												<input type="radio" th:field="*{cirurgia}" value="sim"> Sim
+												<input type="radio" th:field="*{cirurgia}" value="nao"> Não<br>
+
+												<label>Coluna:</label>
+												<input type="radio" th:field="*{coluna}" value="sim"> Sim
+												<input type="radio" th:field="*{coluna}" value="nao"> Não
+											</div>
+
+											<!-- Histórico Familiar -->
+											<div class="col-12">
+												<h5 class="text-primary">Histórico Familiar</h5>
+												<label>Cardiopata:</label>
+												<input type="radio" th:field="*{cardiopata}" value="sim"> Sim
+												<input type="radio" th:field="*{cardiopata}" value="nao"> Não<br>
+
+												<label>Hipertenso:</label>
+												<input type="radio" th:field="*{hipertenso}" value="sim"> Sim
+												<input type="radio" th:field="*{hipertenso}" value="nao"> Não<br>
+
+												<label>Diabético:</label>
+												<input type="radio" th:field="*{diabetico}" value="sim"> Sim
+												<input type="radio" th:field="*{diabetico}" value="nao"> Não
+											</div>
+
+											<!-- Hábitos Pessoais -->
+											<div class="col-12">
+												<h5 class="text-primary">Hábitos Pessoais</h5>
+												<label>Fuma:</label>
+												<input type="radio" th:field="*{fuma}" value="sim"> Sim
+												<input type="radio" th:field="*{fuma}" value="nao"> Não<br>
+
+												<label>Bebe:</label>
+												<input type="radio" th:field="*{bebe}" value="sim"> Sim
+												<input type="radio" th:field="*{bebe}" value="nao"> Não<br>
+
+												<label>Tóxico:</label>
+												<input type="radio" th:field="*{toxico}" value="sim"> Sim
+												<input type="radio" th:field="*{toxico}" value="nao"> Não
+											</div>
+
+											<!-- Atividade Física -->
+											<div class="col-12">
+												<h5 class="text-primary">Atividade Física</h5>
+												<label>Já fez musculação:</label>
+												<input type="radio" th:field="*{jaFezMusculacao}" value="sim"> Sim
+												<input type="radio" th:field="*{jaFezMusculacao}" value="nao"> Não
+
+												<div class="row mt-3">
+													<div class="col-md-6">
+														<label>Tempo (meses/anos)</label>
+														<input type="text" th:field="*{tempoMusculacao}"
+															class="form-control">
+													</div>
+													<div class="col-md-6">
+														<label>Inativo há (meses/anos)</label>
+														<input type="text" th:field="*{inativoHa}" class="form-control">
+													</div>
+													<div class="col-md-6 mt-3">
+														<label>Frequência semanal</label>
+														<input type="text" th:field="*{frequenciaSemanal}"
+															class="form-control">
+													</div>
+													<div class="col-md-6 mt-3">
+														<label>Tempo disponível</label>
+														<input type="text" th:field="*{tempoDisponivel}"
+															class="form-control">
+													</div>
+													<div class="col-md-6 mt-3">
+														<label>Observação</label>
+														<textarea th:field="*{observacao}" class="form-control" rows="4"
+															placeholder="Digite observações relevantes sobre a avaliação física"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Seleção de aluno -->
+								<div class="mt-4">
+									<label class="form-label">Aluno</label>
+									<select class="form-select" disabled>
+										<option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+											th:text="${aluno.nome}"
+											th:selected="${avaliacaoFisica.aluno != null and aluno.id == avaliacaoFisica.aluno.id}">
+										</option>
+									</select>
+									<input type="hidden" th:field="*{aluno.id}" />
+								</div>
+
+								<!-- Botões -->
+								<div class="mt-4 d-flex justify-content-start gap-3">
+									<button type="submit" class="btn btn-warning btn-lg">
+										<i class="bi bi-save"></i> Salvar Alterações
+									</button>
+									<a href="/listarAvaliacoesFisica" class="btn btn-outline-secondary btn-lg">
+										<i class="bi bi-arrow-left-circle"></i> Voltar
+									</a>
+								</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

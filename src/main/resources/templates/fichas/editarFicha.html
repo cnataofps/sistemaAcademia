@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Editar Ficha de Treino</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.main-layout {
+			display: flex;
+			min-height: calc(100vh - 72px);
+		}
+
+		.sidebar {
+			background-color: #ffffff;
+			border-right: 1px solid #dee2e6;
+			width: 250px;
+			padding: 0;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.sidebar .nav-link {
+			display: flex;
+			align-items: center;
+			padding: 1rem 1.5rem;
+			color: #495057;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.sidebar .nav-link i {
+			margin-right: 10px;
+			font-size: 1.2rem;
+		}
+
+		.sidebar .nav-link:hover {
+			background-color: #e9ecef;
+			color: #0d6efd;
+			transform: translateX(4px);
+		}
+
+		.sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		.content-area {
+			flex-grow: 1;
+			padding: 2rem;
+		}
+
+		@media (max-width: 767.98px) {
+			.main-layout {
+				flex-direction: column;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid #dee2e6;
+			}
+		}
+
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h3,
+		body.dark-mode label,
+		body.dark-mode th,
+		body.dark-mode td,
+		body.dark-mode .form-label,
+		body.dark-mode .form-check-label {
+			color: #e0e0e0 !important;
+		}
+
+		body.dark-mode .form-control,
+		body.dark-mode .form-select {
+			background-color: #2a2a2a !important;
+			color: #e0e0e0 !important;
+			border-color: #555 !important;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa !important;
+		}
+
+		body.dark-mode .btn-primary {
+			background-color: #0d6efd !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .btn-secondary {
+			background-color: #6c757d !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .btn-warning {
+			background-color: #ffc107 !important;
+			color: #212529 !important;
+		}
+
+		body.dark-mode .btn-danger {
+			background-color: #dc3545 !important;
+			color: #fff !important;
+		}
+
+		body.dark-mode .table {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .table-striped>tbody>tr:nth-of-type(odd) {
+			background-color: #1f1f1f;
+		}
+
+		body.dark-mode .table-light {
+			background-color: #333;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .alert-info {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #444;
+		}
+
+		/* Transições suaves */
+		.card,
+		.form-control,
+		.btn,
+		.table,
+		.alert {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<div th:replace="~{painel :: navbar}"></div>
+	<div class="main-layout">
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+		<div class="content-area">
+			<h1>Editar Ficha de Treino</h1>
+			<hr>
+			<!-- ✅ Mensagem de sucesso -->
+			<div th:if="${Mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+				<span th:text="${Mensagem}"></span>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+
+			<form th:action="@{'/editarFicha/' + ${ficha.id}}" method="POST">
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label for="objetivo">Objetivo</label>
+						<input type="text" name="objetivo" class="form-control" id="objetivo"
+							th:value="${ficha.objetivo}" required>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="dataCriacao">Data de Criação</label>
+						<input type="date" name="dataCriacao" class="form-control" id="dataCriacao"
+							th:value="${ficha.dataCriacao}" required>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="form-group col-md-6">
+						<label for="aluno">Aluno</label>
+						<select name="aluno.id" id="aluno" class="form-control" required>
+							<option value="">Selecione o aluno</option>
+							<option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
+								th:selected="${aluno.id == ficha.aluno.id}"></option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="dataTroca">Data de Troca</label>
+						<input type="date" name="dataTroca" class="form-control" id="dataTroca"
+							th:value="${ficha.dataTroca}">
+					</div>
+				</div>
+
+				<hr class="my-4">
+				<h4 class="mb-3">Treinos</h4>
+
+				<ul class="nav nav-tabs" id="treinoTabs" role="tablist">
+					<li class="nav-item" th:each="treino, i : ${ficha.treinos}" th:id="'tab-item-' + ${i.index}">
+						<div class="treino-header">
+							<input type="text" class="form-control form-control-sm"
+								th:name="'treinos[' + ${i.index} + '].nome'" th:value="${treino.nome}"
+								title="Editar nome do treino" oninput="atualizarNomeAba([[${i.index}]], this.value)" />
+							<button class="nav-link" th:classappend="${i.index == 0} ? 'active'"
+								th:id="'treino-' + ${i.index} + '-tab'"
+								th:attr="data-bs-toggle='tab', data-bs-target='#treino-' + ${i.index}" type="button"
+								role="tab">
+								<span th:text="${treino.nome}">Treino</span>
+							</button>
+							<button type="button" class="btn btn-sm btn-danger"
+								th:onclick="'removerTreino(' + ${i.index} + ')'" title="Excluir Treino">
+								<i class="bi bi-trash"></i>
+							</button>
+						</div>
+					</li>
+				</ul>
+
+				<div class="tab-content mt-3" id="treinoContent">
+					<div class="tab-pane fade" th:each="treino, i : ${ficha.treinos}" th:id="'treino-' + ${i.index}"
+						th:classappend="${i.index == 0} ? 'show active'" role="tabpanel">
+						<div th:id="'exercicios-' + ${i.index}">
+							<div class="exercise-group" th:each="exercicio, j : ${treino.exercicios}"
+								th:id="'exercicio-' + ${i.index} + '-' + ${j.index}">
+								<button type="button" class="btn btn-sm btn-danger remove-exercicio-btn"
+									th:onclick="'removerExercicio(' + ${i.index} + ',' + ${j.index} + ')'"
+									title="Remover Exercício">
+									<i class="bi bi-x-circle"></i>
+								</button>
+								<div class="row">
+									<div class="col-md-4 mb-3">
+										<label>Nome do Exercício</label>
+										<input type="text" class="form-control"
+											th:name="'treinos[' + ${i.index} + '].exercicios[' + ${j.index} + '].nome'"
+											th:value="${exercicio.nome}" required>
+									</div>
+									<div class="col-md-2 mb-3">
+										<label>Séries</label>
+										<input type="number" class="form-control"
+											th:name="'treinos[' + ${i.index} + '].exercicios[' + ${j.index} + '].serie'"
+											th:value="${exercicio.serie}" required>
+									</div>
+									<div class="col-md-2 mb-3">
+										<label>Repetições</label>
+										<input type="number" class="form-control"
+											th:name="'treinos[' + ${i.index} + '].exercicios[' + ${j.index} + '].repeticoes'"
+											th:value="${exercicio.repeticoes}" required>
+									</div>
+									<div class="col-md-2 mb-3">
+										<label>Carga (kg)</label>
+										<input type="number" class="form-control"
+											th:name="'treinos[' + ${i.index} + '].exercicios[' + ${j.index} + '].carga'"
+											th:value="${exercicio.carga}">
+									</div>
+									<div class="col-md-2 mb-3">
+										<label>Observação</label>
+										<input type="text" class="form-control"
+											th:name="'treinos[' + ${i.index} + '].exercicios[' + ${j.index} + '].observacao'"
+											th:value="${exercicio.observacao}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn btn-sm btn-outline-primary mt-2"
+							th:onclick="'adicionarExercicio(' + ${i.index} + ')'">
+							<i class="bi bi-plus-circle"></i> Adicionar Exercício
+						</button>
+					</div>
+				</div>
+
+				<button type="button" class="btn btn-outline-success mt-3" onclick="adicionarTreino()">
+					<i class="bi bi-plus-circle"></i> Adicionar Treino
+				</button>
+
+				<div class="d-flex flex-wrap gap-3 mt-4">
+					<button type="submit" class="btn btn-primary btn-lg">Salvar Alterações</button>
+					<a href="/controleDeFicha" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const body = document.body;
+			const toggle = document.getElementById('toggleDarkMode');
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+
+	</script>
+</body>
+
+</html>

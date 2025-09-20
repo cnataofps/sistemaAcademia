@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<title>Cadastrar Avaliação Física</title>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}" class="sidebar"></div>
+
+		<!-- Área de conteúdo -->
+		<div class="content-area">
+			<div class="container">
+				<div class="card shadow-sm mb-4">
+					<div class="card-body">
+						<h2 class="card-title text-primary mb-3">
+							<i class="bi bi-clipboard-plus"></i> Cadastrar Avaliação Física
+						</h2>
+
+						<!-- Mensagem de sucesso ou erro -->
+						<div th:if="${Mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+							<span th:text="${Mensagem}"></span>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+
+						<!-- Formulário -->
+						<form method="POST" action="/cadastrarAvaliacaoFisica" th:object="${avaliacaoFisica}">
+							<div class="row g-3 mb-4">
+								<div class="col-md-6">
+									<label class="form-label">Data</label>
+									<input type="date" th:field="*{data}" class="form-control" required>
+								</div>
+								<div class="col-md-6">
+									<label class="form-label">Data Troca</label>
+									<input type="date" th:field="*{dataTroca}" class="form-control" required>
+								</div>
+								<div class="col-md-12">
+									<label class="form-label">Objetivo</label>
+									<input type="text" th:field="*{objetivo}" class="form-control">
+								</div>
+							</div>
+
+							<!-- Abas -->
+							<ul class="nav nav-tabs mb-3" id="avaliacaoTabs" role="tablist">
+								<li class="nav-item" role="presentation">
+									<button class="nav-link active" id="perimetria-tab" data-bs-toggle="tab"
+										data-bs-target="#perimetria" type="button" role="tab">
+										<i class="bi bi-rulers"></i> Perimetria
+									</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button class="nav-link" id="antropometria-tab" data-bs-toggle="tab"
+										data-bs-target="#antropometria" type="button" role="tab">
+										<i class="bi bi-body-text"></i> Antropometria
+									</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button class="nav-link" id="anamnese-tab" data-bs-toggle="tab"
+										data-bs-target="#anamnese" type="button" role="tab">
+										<i class="bi bi-journal-medical"></i> Anamnese
+									</button>
+								</li>
+							</ul>
+
+							<div class="tab-content" id="avaliacaoTabsContent">
+								<!-- Perimetria -->
+								<div class="tab-pane fade show active" id="perimetria" role="tabpanel">
+									<div class="row g-3">
+										<div class="col-md-6"><label>Torax</label><input type="text" th:field="*{torax}"
+												class="form-control"></div>
+										<div class="col-md-6"><label>Abdominal</label><input type="text"
+												th:field="*{abdominal}" class="form-control"></div>
+										<div class="col-md-6"><label>Quadril</label><input type="text"
+												th:field="*{quadril}" class="form-control"></div>
+										<div class="col-md-6"><label>Antebraço</label><input type="text"
+												th:field="*{antebraco}" class="form-control"></div>
+										<div class="col-md-6"><label>Braço Relaxado</label><input type="text"
+												th:field="*{bracorelaxado}" class="form-control"></div>
+										<div class="col-md-6"><label>Braço Contraído</label><input type="text"
+												th:field="*{bracocontraido}" class="form-control"></div>
+										<div class="col-md-6"><label>Coxa Superior</label><input type="text"
+												th:field="*{coxasuperior}" class="form-control"></div>
+										<div class="col-md-6"><label>Panturilha</label><input type="text"
+												th:field="*{panturilha}" class="form-control"></div>
+									</div>
+								</div>
+
+								<!-- Antropometria -->
+								<div class="tab-pane fade" id="antropometria" role="tabpanel">
+									<div class="row g-3 mt-3">
+										<div class="col-md-6"><label>Tricipal</label><input type="text"
+												th:field="*{tricipal}" class="form-control"></div>
+										<div class="col-md-6"><label>Subescapular</label><input type="text"
+												th:field="*{subescapular}" class="form-control"></div>
+										<div class="col-md-6"><label>Peitoral</label><input type="text"
+												th:field="*{peitoral}" class="form-control"></div>
+										<div class="col-md-6"><label>Abdômen</label><input type="text"
+												th:field="*{abdomen}" class="form-control"></div>
+										<div class="col-md-6"><label>Supra-ilíaca</label><input type="text"
+												th:field="*{suprailiaca}" class="form-control"></div>
+										<div class="col-md-6"><label>Coxa</label><input type="text" th:field="*{coxa}"
+												class="form-control"></div>
+										<div class="col-md-6"><label>Axilar Média</label><input type="text"
+												th:field="*{axialmedia}" class="form-control"></div>
+										<div class="col-md-6"><label>Peso</label><input type="number" th:field="*{peso}"
+												class="form-control" step="0.01"></div>
+										<div class="col-md-6"><label>Altura</label><input type="number"
+												th:field="*{altura}" class="form-control" step="0.01"></div>
+										<div class="col-md-6"><label>IMC</label><input type="number" th:field="*{imc}"
+												class="form-control" step="0.01"></div>
+										<div class="col-md-6"><label>% Gordura</label><input type="number"
+												th:field="*{percentualgordura}" class="form-control" step="0.01"></div>
+										<div class="col-md-6"><label>Massa Magra</label><input type="number"
+												th:field="*{massamagra}" class="form-control" step="0.01"></div>
+										<div class="col-md-6"><label>Massa Gorda</label><input type="number"
+												th:field="*{massagorda}" class="form-control" step="0.01"></div>
+									</div>
+								</div>
+
+								<!-- Aba Anamnese -->
+								<div class="tab-pane fade" id="anamnese" role="tabpanel">
+									<div class="row g-4 mt-3">
+										<!-- Histórico Pessoal -->
+										<h5 class="text-primary">Histórico Pessoal</h5>
+
+										<div class="col-md-6">
+											<label class="form-label">Problema articular</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{problemaArticular}" value="sim"
+														id="problemaArticularSim">
+													<label class="form-check-label"
+														for="problemaArticularSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{problemaArticular}" value="nao"
+														id="problemaArticularNao">
+													<label class="form-check-label"
+														for="problemaArticularNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Cirurgia</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{cirurgia}"
+														value="sim" id="cirurgiaSim">
+													<label class="form-check-label" for="cirurgiaSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{cirurgia}"
+														value="nao" id="cirurgiaNao">
+													<label class="form-check-label" for="cirurgiaNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Coluna</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{coluna}"
+														value="sim" id="colunaSim">
+													<label class="form-check-label" for="colunaSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{coluna}"
+														value="nao" id="colunaNao">
+													<label class="form-check-label" for="colunaNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<!-- Histórico Familiar -->
+										<h5 class="text-primary mt-4">Histórico Familiar</h5>
+
+										<div class="col-md-6">
+											<label class="form-label">Cardiopata</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{cardiopata}" value="sim" id="cardiopataSim">
+													<label class="form-check-label" for="cardiopataSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{cardiopata}" value="nao" id="cardiopataNao">
+													<label class="form-check-label" for="cardiopataNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Hipertenso</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{hipertenso}" value="sim" id="hipertensoSim">
+													<label class="form-check-label" for="hipertensoSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio"
+														th:field="*{hipertenso}" value="nao" id="hipertensoNao">
+													<label class="form-check-label" for="hipertensoNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Diabético</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{diabetico}"
+														value="sim" id="diabeticoSim">
+													<label class="form-check-label" for="diabeticoSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{diabetico}"
+														value="nao" id="diabeticoNao">
+													<label class="form-check-label" for="diabeticoNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<!-- Hábitos Pessoais -->
+										<h5 class="text-primary mt-4">Hábitos Pessoais</h5>
+
+										<div class="col-md-6">
+											<label class="form-label">Fuma</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{fuma}"
+														value="sim" id="fumaSim">
+													<label class="form-check-label" for="fumaSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{fuma}"
+														value="nao" id="fumaNao">
+													<label class="form-check-label" for="fumaNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Bebe</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{bebe}"
+														value="sim" id="bebeSim">
+													<label class="form-check-label" for="bebeSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{bebe}"
+														value="nao" id="bebeNao">
+													<label class="form-check-label" for="bebeNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<label class="form-label">Tóxico</label>
+											<div class="d-flex gap-4">
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{toxico}"
+														value="sim" id="toxicoSim">
+													<label class="form-check-label" for="toxicoSim">Sim</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" th:field="*{toxico}"
+														value="nao" id="toxicoNao">
+													<label class="form-check-label" for="toxicoNao">Não</label>
+												</div>
+											</div>
+										</div>
+
+										<!-- Atividade Física -->
+										<h5 class="text-primary mt-4">Atividade Física</h5>
+
+										<div class="row g-3">
+											<div class="col-md-6">
+												<label class="form-label">Já fez musculação</label>
+												<div class="d-flex gap-4">
+													<div class="form-check">
+														<input class="form-check-input" type="radio"
+															th:field="*{jaFezMusculacao}" value="sim"
+															id="musculacaoSim">
+														<label class="form-check-label" for="musculacaoSim">Sim</label>
+													</div>
+													<div class="form-check">
+														<input class="form-check-input" type="radio"
+															th:field="*{jaFezMusculacao}" value="nao"
+															id="musculacaoNao">
+														<label class="form-check-label" for="musculacaoNao">Não</label>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="row g-3 mt-2">
+											<div class="col-md-6">
+												<label class="form-label">Tempo de musculação (meses/anos)</label>
+												<input type="text" th:field="*{tempoMusculacao}" class="form-control"
+													placeholder="Ex: 6 meses, 2 anos">
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Frequência semanal</label>
+												<input type="text" th:field="*{frequenciaSemanal}" class="form-control"
+													placeholder="Ex: 3x por semana">
+											</div>
+										</div>
+
+										<div class="row g-3 mt-2">
+											<div class="col-md-6">
+												<label class="form-label">Inativo há (meses/anos)</label>
+												<input type="text" th:field="*{inativoHa}" class="form-control"
+													placeholder="Ex: 3 meses, 1 ano">
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Tempo disponível</label>
+												<input type="text" th:field="*{tempoDisponivel}" class="form-control"
+													placeholder="Ex: 1h por dia">
+											</div>
+										</div>
+
+										<div class="row mt-3">
+											<div class="col-12">
+												<label class="form-label">Observações</label>
+												<textarea th:field="*{observacao}" class="form-control" rows="4"
+													placeholder="Informações adicionais sobre o aluno ou avaliação"></textarea>
+											</div>
+										</div>
+
+										<!-- Seleção de Aluno -->
+										<div class="col-12 mt-4">
+											<h5 class="text-primary">Selecionar Aluno</h5>
+											<label class="form-label">Aluno</label>
+											<select class="form-select" th:field="*{aluno.id}" required>
+												<option value="" disabled selected>Selecione um aluno</option>
+												<option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+													th:text="${aluno.nome}"></option>
+											</select>
+										</div>
+
+										<!-- Botões -->
+										<div class="col-12 mt-4 d-flex justify-content-start gap-3">
+											<button type="submit" class="btn btn-success btn-lg">
+												<i class="bi bi-check-circle"></i> Salvar Avaliação Física
+											</button>
+											<a href="/listarAvaliacoesFisica" class="btn btn-outline-secondary btn-lg">
+												<i class="bi bi-arrow-left-circle"></i> Voltar
+											</a>
+										</div>
+									</div>
+								</div>
+								<!-- Scripts -->
+								<script
+									src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+								<script>
+									document.addEventListener('DOMContentLoaded', function () {
+										const toggle = document.getElementById('toggleDarkMode');
+										const body = document.body;
+
+										if (localStorage.getItem('modoNoturno') === 'true') {
+											body.classList.add('dark-mode');
+										}
+
+										if (toggle) {
+											toggle.addEventListener('click', function () {
+												body.classList.toggle('dark-mode');
+												localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+											});
+										}
+									});
+								</script>
+</body>
+
+</html>

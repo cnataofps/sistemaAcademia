@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{painel :: header}">
+	<meta charset="UTF-8">
+	<title>Mensagens de Suporte</title>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{painel :: navbar}"></div>
+
+	<!-- Layout principal -->
+	<div class="main-layout">
+		<!-- Sidebar -->
+		<div th:replace="~{painel :: sidebar}"></div>
+		<!-- Conteúdo -->
+		<div class="content-area">
+			<h2 class="mb-4">📬 Mensagens Recebidas</h2>
+
+			<div th:if="${Mensagem}" class="alert alert-success" role="alert">
+				<span th:text="${Mensagem}"></span>
+			</div>
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>ID Usuário</th>
+						<th>Assunto</th>
+						<th>Mensagem</th>
+						<th>Data de Envio</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="msg : ${mensagens}">
+						<td th:text="${msg.id}"></td>
+						<td th:text="${msg.usuario != null ? msg.usuario.id : 'N/D'}"></td>
+						<td th:text="${msg.assunto}"></td>
+						<td th:text="${msg.mensagem}"></td>
+						<td th:text="${#temporals.format(msg.dataEnvio, 'dd/MM/yyyy HH:mm')}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Estilos adicionais para modo noturno -->
+	<style>
+		body.dark-mode .content-area {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode h2 {
+			color: #66b2ff;
+		}
+
+		body.dark-mode .table {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .table th,
+		body.dark-mode .table td {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #444;
+		}
+
+		body.dark-mode .table-hover tbody tr:hover {
+			background-color: #333;
+		}
+
+		body.dark-mode .alert-success {
+			background-color: #1e3d1e;
+			color: #b0ffb0;
+			border-color: #2f6f2f;
+		}
+
+		body,
+		.table,
+		.table th,
+		.table td,
+		.content-area {
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+	</style>
+
+	<!-- Script de modo noturno -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+
+			// Aplica tema salvo
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			// Alterna e salva
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+		
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

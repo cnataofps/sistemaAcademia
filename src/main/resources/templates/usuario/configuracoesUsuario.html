@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{painel :: header}">
+    <meta charset="UTF-8">
+    <title>Configurações</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+   <div th:replace="~{painel :: navbar}"></div>
+
+    <!-- Layout principal -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div th:replace="~{painel :: sidebar}"></div>
+
+        <!-- Conteúdo -->
+        <div class="content-area">
+            <h2 class="mb-4">⚙️ Configurações do Sistema</h2>
+
+            <div th:if="${Mensagem}" class="alert alert-success" role="alert">
+                <span th:text="${Mensagem}"></span>
+            </div>
+
+            <form>
+                <div class="mb-3">
+                    <label for="tema" class="form-label">Tema</label>
+                    <select id="tema" class="form-control">
+                        <option value="claro">Claro</option>
+                        <option value="escuro">Escuro</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="notificacoes" class="form-label">Notificações</label>
+                    <select id="notificacoes" class="form-control">
+                        <option value="ativadas">Ativadas</option>
+                        <option value="desativadas">Desativadas</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Preferências</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggle = document.getElementById('toggleDarkMode');
+            const temaSelect = document.getElementById('tema');
+            const body = document.body;
+
+            // Aplica tema salvo
+            if (localStorage.getItem('modoNoturno') === 'true') {
+                body.classList.add('dark-mode');
+                if (temaSelect) temaSelect.value = 'escuro';
+            } else {
+                if (temaSelect) temaSelect.value = 'claro';
+            }
+
+            // Botão de modo noturno
+            if (toggle) {
+                toggle.addEventListener('click', function () {
+                    body.classList.toggle('dark-mode');
+                    localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+                    if (temaSelect) temaSelect.value = body.classList.contains('dark-mode') ? 'escuro' : 'claro';
+                });
+            }
+
+            // Mudança via select
+            if (temaSelect) {
+                temaSelect.addEventListener('change', function () {
+                    if (this.value === 'escuro') {
+                        body.classList.add('dark-mode');
+                        localStorage.setItem('modoNoturno', true);
+                    } else {
+                        body.classList.remove('dark-mode');
+                        localStorage.setItem('modoNoturno', false);
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Excluir Aluno</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+  <h2>Excluir Aluno</h2>
+  <form onsubmit="event.preventDefault(); window.location.href='/deletarAluno/' + document.getElementById('idAluno').value;" class="form-inline">
+    <label for="idAluno" class="mr-2">ID do aluno:</label>
+    <input type="number" id="idAluno" class="form-control mr-2" placeholder="Digite o ID" required>
+    <button type="submit" class="btn btn-danger">Excluir</button>
+  </form>
+</body>
+</html>

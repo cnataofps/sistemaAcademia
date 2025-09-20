@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{painel :: header}">
+	<style>
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .card {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-label {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-control {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #555;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa;
+		}
+
+		body.dark-mode .btn {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .btn-success {
+			background-color: #198754;
+			color: #fff;
+		}
+
+		body.dark-mode .btn-info {
+			background-color: #0dcaf0;
+			color: #fff;
+		}
+
+		body.dark-mode .btn-warning {
+			background-color: #ffc107;
+			color: #212529;
+		}
+
+		body.dark-mode .btn-danger {
+			background-color: #dc3545;
+			color: #fff;
+		}
+
+		body.dark-mode .text-muted {
+			color: #b0b0b0 !important;
+		}
+
+		body.dark-mode .text-primary {
+			color: #66b2ff !important;
+		}
+
+		body.dark-mode i.bi {
+			color: #e0e0e0;
+		}
+	</style>
+</head>
+
+<body>
+	<div th:replace="~{painel :: navbar}"></div>
+	<div class="main-layout">
+		<div th:replace="~{painel :: sidebar}"></div>
+		<div class="content-area">
+			<h2 class="mb-4">📋 Histórico de Avaliações Físicas</h2>
+
+			<div th:if="${avaliacoes != null and #lists.isEmpty(avaliacoes)}" class="alert alert-warning">
+				Nenhuma avaliação física registrada para este aluno.
+			</div>
+
+			<div th:each="avaliacao : ${avaliacoes}" class="card p-4 mb-4 shadow-sm">
+				<h5 class="text-primary mb-2">
+					<i class="bi bi-person-badge"></i> Aluno: <span th:text="${aluno.nome}"></span>
+				</h5>
+				<p class="text-muted mb-2">
+					<i class="bi bi-calendar-event"></i> Data: <span
+						th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}"></span>
+				</p>
+				<p class="text-muted mb-3">
+					🎯 Objetivo: <span th:text="${avaliacao.objetivo}"></span>
+				</p>
+
+				<!-- PERIMETRIA -->
+				<h6 class="fw-bold mt-3">📏 Perimetria</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Tórax</td>
+						<td th:text="${avaliacao.torax}"></td>
+					</tr>
+					<tr>
+						<td>Abdominal</td>
+						<td th:text="${avaliacao.abdominal}"></td>
+					</tr>
+					<tr>
+						<td>Quadril</td>
+						<td th:text="${avaliacao.quadril}"></td>
+					</tr>
+					<tr>
+						<td>Antebraço</td>
+						<td th:text="${avaliacao.antebraco}"></td>
+					</tr>
+					<tr>
+						<td>Braço Relaxado</td>
+						<td th:text="${avaliacao.bracorelaxado}"></td>
+					</tr>
+					<tr>
+						<td>Braço Contraído</td>
+						<td th:text="${avaliacao.bracocontraido}"></td>
+					</tr>
+					<tr>
+						<td>Coxa Superior</td>
+						<td th:text="${avaliacao.coxasuperior}"></td>
+					</tr>
+					<tr>
+						<td>Panturrilha</td>
+						<td th:text="${avaliacao.panturilha}"></td>
+					</tr>
+				</table>
+
+				<!-- ANTROPOMETRIA -->
+				<h6 class="fw-bold mt-4">📐 Antropometria</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Tricipal</td>
+						<td th:text="${avaliacao.tricipal}"></td>
+					</tr>
+					<tr>
+						<td>Subescapular</td>
+						<td th:text="${avaliacao.subescapular}"></td>
+					</tr>
+					<tr>
+						<td>Peitoral</td>
+						<td th:text="${avaliacao.peitoral}"></td>
+					</tr>
+					<tr>
+						<td>Abdômen</td>
+						<td th:text="${avaliacao.abdomen}"></td>
+					</tr>
+					<tr>
+						<td>Supra-ilíaca</td>
+						<td th:text="${avaliacao.suprailiaca}"></td>
+					</tr>
+					<tr>
+						<td>Coxa</td>
+						<td th:text="${avaliacao.coxa}"></td>
+					</tr>
+					<tr>
+						<td>Axial Média</td>
+						<td th:text="${avaliacao.axialmedia}"></td>
+					</tr>
+				</table>
+
+				<!-- DADOS FÍSICOS -->
+				<h6 class="fw-bold mt-4">⚖️ Dados Físicos</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Peso</td>
+						<td th:text="${avaliacao.peso} + ' kg'"></td>
+					</tr>
+					<tr>
+						<td>Altura</td>
+						<td th:text="${avaliacao.altura} + ' m'"></td>
+					</tr>
+					<tr>
+						<td>IMC</td>
+						<td th:text="${avaliacao.imc}"></td>
+					</tr>
+					<tr>
+						<td>% Gordura</td>
+						<td th:text="${avaliacao.percentualgordura}"></td>
+					</tr>
+					<tr>
+						<td>Massa Magra</td>
+						<td th:text="${avaliacao.massamagra}"></td>
+					</tr>
+					<tr>
+						<td>Massa Gorda</td>
+						<td th:text="${avaliacao.massagorda}"></td>
+					</tr>
+				</table>
+
+				<!-- HISTÓRICO PESSOAL -->
+				<h6 class="fw-bold mt-4">🩺 Histórico Pessoal</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Problema Articular</td>
+						<td th:text="${avaliacao.problemaArticular}"></td>
+					</tr>
+					<tr>
+						<td>Cirurgia</td>
+						<td th:text="${avaliacao.cirurgia}"></td>
+					</tr>
+					<tr>
+						<td>Coluna</td>
+						<td th:text="${avaliacao.coluna}"></td>
+					</tr>
+				</table>
+
+				<!-- HISTÓRICO FAMILIAR -->
+				<h6 class="fw-bold mt-4">👨‍👩‍👧 Histórico Familiar</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Cardiopata</td>
+						<td th:text="${avaliacao.cardiopata}"></td>
+					</tr>
+					<tr>
+						<td>Hipertenso</td>
+						<td th:text="${avaliacao.hipertenso}"></td>
+					</tr>
+					<tr>
+						<td>Diabético</td>
+						<td th:text="${avaliacao.diabetico}"></td>
+					</tr>
+				</table>
+
+				<!-- HÁBITOS PESSOAIS -->
+				<h6 class="fw-bold mt-4">🧠 Hábitos Pessoais</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Fuma</td>
+						<td th:text="${avaliacao.fuma}"></td>
+					</tr>
+					<tr>
+						<td>Bebe</td>
+						<td th:text="${avaliacao.bebe}"></td>
+					</tr>
+					<tr>
+						<td>Uso de Substâncias</td>
+						<td th:text="${avaliacao.toxico}"></td>
+					</tr>
+				</table>
+
+				<!-- ATIVIDADE FÍSICA -->
+				<h6 class="fw-bold mt-4">🏋️ Atividade Física</h6>
+				<table class="table table-bordered table-sm">
+					<tr>
+						<td>Já fez musculação?</td>
+						<td th:text="${avaliacao.jaFezMusculacao}"></td>
+					</tr>
+					<tr>
+						<td>Tempo de musculação</td>
+						<td th:text="${avaliacao.tempoMusculacao}"></td>
+					</tr>
+					<tr>
+						<td>Inativo há</td>
+						<td th:text="${avaliacao.inativoHa}"></td>
+					</tr>
+					<tr>
+						<td>Frequência semanal</td>
+						<td th:text="${avaliacao.frequenciaSemanal}"></td>
+					</tr>
+					<tr>
+						<td>Tempo disponível</td>
+						<td th:text="${avaliacao.tempoDisponivel}"></td>
+					</tr>
+				</table>
+
+				<!-- OBSERVAÇÕES -->
+				<h6 class="fw-bold mt-4">📝 Observações do Avaliador</h6>
+				<p th:text="${avaliacao.observacao}" class="text-muted"></p>
+			</div>
+
+			<div class="mt-4">
+				<a href="/" class="btn btn-outline-secondary btn-lg">
+					<i class="bi bi-arrow-left-circle"></i> Voltar
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const toggle = document.getElementById('toggleDarkMode');
+			const body = document.body;
+
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
+
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cadastro</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+		body {
+			font-family: 'Inter', sans-serif;
+			/* Aplica a fonte Inter com fallback para fontes sans-serif */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background: linear-gradient(135deg, #6DC5D1, #f7f9fc);
+		}
+
+		.register-container {
+			width: 100%;
+			max-width: 400px;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 10px 10px 10px 10px rgba(0.1, 0.1, 0.1, 0.1);
+			background-color: #ffffff;
+		}
+
+		.input-group-text {
+			background-color: #e9ecef;
+			border: 1px solid #ccc;
+			border-radius: 8px 0 0 8px;
+			padding: 10px;
+			color: #555;
+			font-size: 1rem;
+		}
+
+		.input-group .form-control {
+			border-radius: 0 8px 8px 0;
+			border-left: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="register-container">
+		<h2 class="text-center mb-4"><i class="bi bi-person-plus-fill me-2"></i>Cadastro</h2>
+		<div th:if="${sucesso}" class="alert alert-success text-center" role="alert">
+			<i class="bi bi-check-circle-fill me-1"></i><span th:text="${sucesso}"></span>
+		</div>
+		<form method="post" novalidate>
+			<div class="form-group">
+				<label for="username">Nome de Usuário</label>
+				<div class="input-group">
+					<span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+					<input type="text" name="nome" class="form-control" id="username" placeholder="Digite seu nome"
+						required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email">E-mail</label>
+				<div class="input-group">
+					<span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+					<input type="email" name="email" class="form-control" id="email" placeholder="Digite seu e-mail"
+						required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="password">Senha</label>
+				<div class="input-group">
+					<span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+					<input type="password" name="senha" class="form-control" id="password"
+						placeholder="Digite sua senha" required>
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
+							<i class="bi bi-eye-fill"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="confirmPassword">Confirme sua Senha</label>
+				<div class="input-group">
+					<span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+					<input type="password" class="form-control" id="confirmPassword" placeholder="Confirme sua senha"
+						required>
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary toggle-password" type="button"
+							data-target="#confirmPassword">
+							<i class="bi bi-eye-fill"></i>
+						</button>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="perfil">Perfil</label>
+					<select name="perfil" id="perfil" class="form-control" required>
+						<option value="">Selecione o perfil</option>
+						<option value="ADMIN">Administrador</option>
+						<option value="PROFESSOR">Professor</option>
+						<option value="ALUNO">Aluno</option>
+					</select>
+				</div>
+
+				<button type="submit" class="btn btn-primary btn-block mt-3">
+					<i class="bi bi-check-circle me-2"></i>Cadastrar
+				</button>
+
+				<div class="text-center mt-3">
+					<a href="/login" class="text-muted"><i class="bi bi-arrow-left-circle me-1"></i>Voltar para
+						login</a>
+				</div>
+		</form>
+	</div>
+
+	<!-- Scripts do Bootstrap -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+			$('.toggle-password').click(function () {
+				const input = $($(this).data('target'));
+				const icon = $(this).find('i');
+
+				if (input.attr('type') === 'password') {
+					input.attr('type', 'text');
+					icon.removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
+				} else {
+					input.attr('type', 'password');
+					icon.removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>
