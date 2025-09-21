@@ -222,22 +222,37 @@
 						<thead class="table-light">
 							<tr>
 								<th>ID</th>
+								<th>Matricula</th>
 								<th>Aluno</th>
 								<th>Peso</th>
 								<th>Altura</th>
+								<th>IMC</th>
 								<th>Data</th>
-
+								<th>Data Troca</th>
+								<th>Ações</th> 
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="avaliacao : ${avaliacoes}">
 								<td th:text="${avaliacao.id}">ID</td>
-								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.nome : 'Aluno não definido'}">
-									Aluno</td>
+								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.matricula : 'Matricula não definida'}">Matricula</td>
+								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.nome : 'Aluno não definido'}">Aluno</td>
 								<td th:text="${avaliacao.peso}">Peso</td>
 								<td th:text="${#numbers.formatDecimal(avaliacao.altura, 1, 2)}">Altura</td>
-								<td th:text="${avaliacao.data}">Data</td>
-
+								<td th:text="${avaliacao.imc}">IMC</td>
+								<td th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}">Data</td>
+								<td th:text="${#temporals.format(avaliacao.dataTroca, 'dd/MM/yyyy')}">Data Troca</td>
+								<td>
+									<a th:href="@{'/editarAvaliacaoFisica/' + ${avaliacao.id}}"
+										class="btn btn-sm btn-warning me-1">
+										<i class="bi bi-pencil-square"></i> Editar
+									</a>
+									<a th:href="@{'/deletarAvaliacaoFisica/' + ${avaliacao.id}}"
+										class="btn btn-sm btn-danger"
+										onclick="return confirm('Tem certeza que deseja excluir esta avaliação?');">
+										<i class="bi bi-trash"></i> Excluir
+									</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>

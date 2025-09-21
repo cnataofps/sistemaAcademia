@@ -1,6 +1,8 @@
 package com.script.academia.entities;
 
 import java.time.LocalDate;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +31,7 @@ public class Aluno {
 	@Column(unique = true)
 	@NotEmpty
 	private String email;
-	@OneToOne
+	@OneToOne(mappedBy = "aluno", cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 	

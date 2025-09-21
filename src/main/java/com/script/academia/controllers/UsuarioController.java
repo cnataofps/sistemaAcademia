@@ -3,9 +3,13 @@ package com.script.academia.controllers;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +24,7 @@ import com.script.academia.security.UsuarioDetalhes;
 
 @Controller
 public class UsuarioController {
-	
+
 	@Autowired
 	private AlunoRepository alunoRepository;
 
@@ -29,6 +33,16 @@ public class UsuarioController {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
+	private void adicionarNomeUsuario(Model model) {
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+			model.addAttribute("nome", detalhes.getUsuario().getNome());
+		} catch (Exception e) {
+			model.addAttribute("nome", "Usuário");
+		}
+	}
 
 	@GetMapping("/cadastrarUsuario")
 	public String cadastro() {
@@ -49,8 +63,12 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/usuario/alterar")
-	public String alterarDados(@RequestParam String nome, @RequestParam String email, @RequestParam String endereco,
-			@RequestParam String profissao, @RequestParam(required = false) String novaSenha,
+	public String alterarDados(
+			@RequestParam String nome,
+			@RequestParam String email,
+			@RequestParam(required = false) String endereco,
+			@RequestParam(required = false) String profissao,
+			@RequestParam(required = false) String novaSenha,
 			@RequestParam(required = false) String confirmarSenha,
 			@AuthenticationPrincipal UsuarioDetalhes usuarioDetalhes, RedirectAttributes redirectAttributes) {
 
@@ -63,7 +81,7 @@ public class UsuarioController {
 			Usuario usuario = usuarioDetalhes.getUsuario();
 
 			// Verifica se o novo e-mail já está em uso por outro usuário
-			
+
 			Optional<Usuario> existente = usuarioRepository.findByEmail(email);
 			if (existente.isPresent() && !Objects.equals(existente.get().getId(), usuario.getId())) {
 				redirectAttributes.addFlashAttribute("erro", "E-mail já está em uso por outro usuário.");
@@ -71,7 +89,7 @@ public class UsuarioController {
 			}
 
 			// Atualiza apenas os campos editáveis
-			
+
 			usuario.setNome(nome);
 			usuario.setEmail(email);
 
@@ -86,18 +104,15 @@ public class UsuarioController {
 			usuarioRepository.save(usuario);
 
 			// Busca o aluno vinculado e atualiza apenas os campos editáveis
-			
-			Aluno aluno = alunoRepository.findByUsuario(usuario).orElseThrow();
 
-			aluno.setNome(nome);
-			aluno.setEmail(email);
-			aluno.setEndereco(endereco);
-			aluno.setProfissao(profissao);
-
-			// ❌ NÃO atualiza CPF, matrícula ou data de nascimento — preserva os dados
-			// antigos
-			
-			alunoRepository.save(aluno);
+			if (usuario.getPerfil() == Perfil.ALUNO) {
+				Aluno aluno = alunoRepository.findByUsuario(usuario).orElseThrow();
+				aluno.setNome(nome);
+				aluno.setEmail(email);
+				aluno.setEndereco(endereco);
+				aluno.setProfissao(profissao);
+				alunoRepository.save(aluno);
+			}
 
 			redirectAttributes.addFlashAttribute("sucesso", "Dados atualizados com sucesso!");
 			return "redirect:/alterarDados";
@@ -108,4 +123,36 @@ public class UsuarioController {
 			return "redirect:/alterar";
 		}
 	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/listarUsuario")
+	public String listarUsuarios(org.springframework.ui.Model model) {
+		adicionarNomeUsuario(model);
+		model.addAttribute("mensagens", usuarioRepository.findAll());
+		return "usuario/listarUsuario";
+	}
+
+	@GetMapping("/alterarDados")
+	public String exibirFormularioAlteracao(Model model, @AuthenticationPrincipal UsuarioDetalhes usuarioDetalhes) {
+		adicionarNomeUsuario(model);
+
+		if (usuarioDetalhes == null || usuarioDetalhes.getUsuario() == null) {
+			model.addAttribute("erro", "Usuário não autenticado.");
+			return "redirect:/login";
+		}
+
+		Usuario usuario = usuarioDetalhes.getUsuario();
+		model.addAttribute("usuario", usuario);
+
+		if (usuario.getPerfil() == Perfil.PROFESSOR) {
+			model.addAttribute("tipo", "professor");
+			return "usuario/alterarProfessor";
+		} else {
+			Aluno aluno = alunoRepository.findByUsuario(usuario).orElse(null);
+			model.addAttribute("aluno", aluno);
+			model.addAttribute("tipo", "aluno");
+			return "usuario/alterarAluno";
+		}
+	}
+
 }

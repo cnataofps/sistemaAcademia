@@ -9,6 +9,9 @@ import com.script.academia.security.UsuarioDetalhes;
 
 @Controller
 public class DashboardController {
+	
+	// Obtém o objeto de autenticação do usuário atualmente logado no sistema.
+	// Isso permite acessar informações como nome, email e perfil do usuário.
 
 	private void adicionarNomeUsuario(Model model) {
 		try {
@@ -57,6 +60,12 @@ public class DashboardController {
 		adicionarNomeUsuario(model);
 		return "controleAvaliacaoFisica";
 	}
+	
+	@GetMapping("/controleUsuario")
+	public String controleUsuario(Model model) {
+		adicionarNomeUsuario(model);
+		return "controleUsuario";
+	}
 
 	@GetMapping("/suporte")
 	public String suporte(Model model) {
@@ -87,10 +96,5 @@ public class DashboardController {
 		}
 	}
 
-	@GetMapping("/alterarDados")
-	public String alterarDados(Model model) {
-		adicionarNomeUsuario(model);
-		return "alterarDados";
-	}
-
+	
 }

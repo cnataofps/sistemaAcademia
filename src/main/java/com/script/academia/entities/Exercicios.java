@@ -22,6 +22,8 @@ public class Exercicios {
     @ManyToOne
     @JoinColumn(name = "treino_id")
     private Treino treino;
+   
+    
     
     
     public Exercicios() {

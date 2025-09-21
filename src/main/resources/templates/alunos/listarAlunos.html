@@ -167,7 +167,7 @@
 							<th>Data de Nascimento</th>
 							<th>Profissão</th>
 							<th>Endereço</th>
-
+							<th>Ações</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -176,10 +176,19 @@
 							<td th:text="${aluno.matricula}"></td>
 							<td th:text="${aluno.nome}"></td>
 							<td th:text="${aluno.cpf}"></td>
-							<td th:text="${aluno.dataNasc}"></td>
+							<td>
+								<span th:if="${aluno.dataNasc}"
+								th:text="${#temporals.format(aluno.dataNasc, 'dd/MM/yyyy')}"></span>
+								<span th:unless="${aluno.dataNasc}">N/D</span>
+							</td>
 							<td th:text="${aluno.profissao}"></td>
 							<td th:text="${aluno.endereco}"></td>
-
+							<td>
+								<a th:href="@{'/editarAlunos/' + ${aluno.id}}" class="btn btn-sm btn-warning me-1">
+									<i class="bi bi-pencil-square"></i> Editar
+								</a>
+								
+							</td>
 						</tr>
 					</tbody>
 				</table>

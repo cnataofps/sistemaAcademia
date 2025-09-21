@@ -219,22 +219,34 @@
 						<thead class="table-light">
 							<tr>
 								<th>ID</th>
+								<th>Matrícula</th>
 								<th>Aluno</th>
 								<th>Data Criação</th>
 								<th>Data Troca</th>
 								<th>Objetivo</th>
+								<th>Ações</th>
 
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="fichaDeTreinamento : ${fichas}">
 								<td th:text="${fichaDeTreinamento.id}">ID</td>
-								<td
-									th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.nome : 'Ficha de Treinamento não definido'}">
-									Aluno</td>
+								<td th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.matricula : 'Sem matrícula'}">Matrícula</td>
+								<td th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.nome : 'Ficha de Treinamento não definida'}"> Aluno</td>
 								<td th:text="${fichaDeTreinamento.dataCriacao}">Data Criação</td>
 								<td th:text="${fichaDeTreinamento.dataTroca}">Data Troca</td>
 								<td th:text="${fichaDeTreinamento.objetivo}">Objetivo</td>
+								<td>
+									<a th:href="@{'/editarFicha/' + ${fichaDeTreinamento.id}}"
+										class="btn btn-sm btn-warning me-1">
+										<i class="bi bi-pencil-square"></i> Editar
+									</a>
+									<a th:href="@{'/deletarFicha/' + ${fichaDeTreinamento.id}}"
+										class="btn btn-sm btn-danger"
+										onclick="return confirm('Tem certeza que deseja excluir esta ficha?');">
+										<i class="bi bi-trash"></i> Excluir
+									</a>
+								</td>
 
 							</tr>
 						</tbody>

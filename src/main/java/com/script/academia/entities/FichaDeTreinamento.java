@@ -2,7 +2,6 @@ package com.script.academia.entities;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +27,7 @@ public class FichaDeTreinamento {
     private Aluno aluno;
     @OneToMany(mappedBy = "ficha", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Treino> treinos;
-
+   
     	
 	
 	// CONSTRUTOR VAZIO.

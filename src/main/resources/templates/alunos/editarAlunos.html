@@ -192,7 +192,7 @@
 					<div class="form-group col-12 col-md-6">
 						<label for="dataNasc">Data de Nascimento</label>
 						<input type="date" name="dataNasc" class="form-control" id="dataNasc"
-							th:value="${#dates.format(aluno.dataNasc, 'yyyy-MM-dd')}" required>
+							th:value="${#temporals.format(aluno.dataNasc, 'yyyy-MM-dd')}" required>
 					</div>
 				</div>
 

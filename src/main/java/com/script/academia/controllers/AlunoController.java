@@ -32,21 +32,20 @@ public class AlunoController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
 	@Autowired
 	private TreinoRepository treinoRepository;
-
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
 	@Autowired
 	private FichaDeTreinamentoRepository fichaDeTreinamentoRepository;
-
 	@Autowired
 	private AvaliacaoFisicaRepository avaliacaoFisicaRepository;
-
 	@Autowired
 	private AlunoRepository alunoRepository;
+	
+	
+	// Obtém o objeto de autenticação do usuário atualmente logado no sistema.
+	// Isso permite acessar informações como nome, email e perfil do usuário.
 
 	private void adicionarNomeUsuario(Model model) {
 		try {
@@ -66,8 +65,7 @@ public class AlunoController {
 	}
 
 	@PostMapping("/cadastrarAlunos")
-	public String salvarAluno(@Valid Aluno aluno, BindingResult result, @RequestParam("senha") String senha,
-			RedirectAttributes attributes) {
+	public String salvarAluno(@Valid Aluno aluno, BindingResult result, @RequestParam("senha") String senha, RedirectAttributes attributes) {
 
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
