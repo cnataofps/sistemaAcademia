@@ -56,6 +56,8 @@ public class AlunoController {
 			model.addAttribute("nome", "Usuário");
 		}
 	}
+	
+	// CADASTRAR ALUNO
 
 	@GetMapping("/cadastrarAlunos")
 	public String cadastrarAluno(Model model) {
@@ -63,7 +65,9 @@ public class AlunoController {
 		model.addAttribute("aluno", new Aluno());
 		return "alunos/cadastrarAlunos";
 	}
-
+	
+	// CADASTRAR ALUNO
+	
 	@PostMapping("/cadastrarAlunos")
 	public String salvarAluno(@Valid Aluno aluno, BindingResult result, @RequestParam("senha") String senha, RedirectAttributes attributes) {
 
