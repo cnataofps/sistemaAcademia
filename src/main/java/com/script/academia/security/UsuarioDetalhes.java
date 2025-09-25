@@ -16,6 +16,7 @@ public class UsuarioDetalhes implements UserDetails {
     }
 
     public Usuario getUsuario() {
+        System.out.println("Usuario carregado: " + usuario.getId() + " - " + usuario.getNome());
         return this.usuario;
     }
 

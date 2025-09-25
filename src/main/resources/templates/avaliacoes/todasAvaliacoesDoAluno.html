@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{painel :: header}">
 	<meta charset="UTF-8">
-	<title>Minhas Avaliações Físicas</title>
+	<title>Avaliações Físicas do Aluno</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -62,39 +62,41 @@
 	<div class="main-layout">
 		<div th:replace="~{painel :: sidebar}"></div>
 		<div class="content-area container py-5">
-			<h2 class="mb-4 text-center"><i class="bi bi-clipboard-pulse"></i> Minhas Avaliações Físicas</h2>
+			<h2 class="mb-4 text-center"><i class="bi bi-clipboard-pulse"></i> Avaliações Físicas Recebidas</h2>
 
-			<div th:if="${avaliacoes != null and #lists.isEmpty(avaliacoes)}" class="alert alert-warning text-center">
-				<i class="bi bi-info-circle-fill me-1"></i> Nenhuma avaliação física registrada para este aluno.
-			</div>
-
-			<div th:each="avaliacao : ${avaliacoes}" class="card shadow-sm mb-5">
-				<!-- Cabeçalho com dados do aluno -->
-				<div class="card-header bg-primary text-white">
-					<i class="bi bi-person-badge-fill me-2"></i> Informações da Avaliação
-				</div>
-				<div class="card-body">
-					<div class="row mb-3">
-						<div class="col-md-4"><strong>Nome:</strong> <span th:text="${avaliacao.aluno.nome}"></span>
+			<div th:if="${#lists.isEmpty(avaliacoes) == false}">
+				<div th:each="avaliacao : ${avaliacoes}" class="card shadow-sm mb-5">
+					<!-- Cabeçalho informativo -->
+					<div class="card-body bg-light rounded shadow-sm mb-4">
+						<div class="row">
+							<div class="col-md-4 mb-2">
+								<strong>Nome:</strong> <span th:text="${avaliacao.aluno.nome}"></span>
+							</div>
+							<div class="col-md-4 mb-2">
+								<strong>Matrícula:</strong> <span th:text="${avaliacao.aluno.id}"></span>
+							</div>
+							<div class="col-md-4 mb-2">
+								<strong>Professor:</strong>
+								<span
+									th:text="${avaliacao.professor != null ? avaliacao.professor.nome : 'Não definido'}"></span>
+							</div>
 						</div>
-						<div class="col-md-4"><strong>Matrícula:</strong> <span th:text="${avaliacao.aluno.id}"></span>
-						</div>
-						<div class="col-md-4"><strong>Professor:</strong> <span
-								th:text="${avaliacao.professor != null ? avaliacao.professor.nome : 'Professor não definido'}"></span>
+						<div class="row">
+							<div class="col-md-4 mb-2">
+								<strong>Objetivo:</strong> <span th:text="${avaliacao.objetivo}"></span>
+							</div>
+							<div class="col-md-4 mb-2">
+								<strong>Data de Criação:</strong>
+								<span th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}"></span>
+							</div>
+							<div class="col-md-4 mb-2">
+								<strong>Troca Prevista:</strong>
+								<span th:text="${#temporals.format(avaliacao.dataTroca, 'dd/MM/yyyy')}"></span>
+							</div>
 						</div>
 					</div>
-					<div class="row mb-3">
-						<div class="col-md-4"><strong>Objetivo:</strong> <span th:text="${avaliacao.objetivo}"></span>
-						</div>
-						<div class="col-md-4"><strong>Data de Criação:</strong> <span
-								th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}"></span>
-						</div>
-						<div class="col-md-4"><strong>Troca Prevista:</strong> <span
-								th:text="${#temporals.format(avaliacao.dataTroca, 'dd/MM/yyyy')}"></span>
-						</div>
-					</div>
 
-					<!-- PERIMETRIA -->
+					<!-- Perimetria -->
 					<h6 class="section-title mt-4">📏 Perimetria</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -131,7 +133,7 @@
 						</tr>
 					</table>
 
-					<!-- ANTROPOMETRIA -->
+					<!-- Antropometria -->
 					<h6 class="section-title mt-4">📐 Antropometria</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -164,7 +166,7 @@
 						</tr>
 					</table>
 
-					<!-- DADOS FÍSICOS -->
+					<!-- Dados Físicos -->
 					<h6 class="section-title mt-4">⚖️ Dados Físicos</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -193,7 +195,7 @@
 						</tr>
 					</table>
 
-					<!-- HISTÓRICO PESSOAL -->
+					<!-- Histórico Pessoal -->
 					<h6 class="section-title mt-4">🩺 Histórico Pessoal</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -210,7 +212,7 @@
 						</tr>
 					</table>
 
-					<!-- HISTÓRICO FAMILIAR -->
+					<!-- Histórico Familiar -->
 					<h6 class="section-title mt-4">👨‍👩‍👧 Histórico Familiar</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -227,7 +229,7 @@
 						</tr>
 					</table>
 
-					<!-- HÁBITOS PESSOAIS -->
+					<!-- Hábitos Pessoais -->
 					<h6 class="section-title mt-4">🧠 Hábitos Pessoais</h6>
 					<table class="table table-bordered table-sm">
 						<tr>
@@ -242,64 +244,74 @@
 							<td>Uso de Substâncias</td>
 							<td th:text="${avaliacao.toxico}"></td>
 						</tr>
-						<!-- ATIVIDADE FÍSICA -->
-						<h6 class="section-title mt-4">🏋️ Atividade Física</h6>
-						<table class="table table-bordered table-sm">
-							<tr>
-								<td>Já fez musculação?</td>
-								<td th:text="${avaliacao.jaFezMusculacao}"></td>
-							</tr>
-							<tr>
-								<td>Tempo de musculação</td>
-								<td th:text="${avaliacao.tempoMusculacao}"></td>
-							</tr>
-							<tr>
-								<td>Inativo há</td>
-								<td th:text="${avaliacao.inativoHa}"></td>
-							</tr>
-							<tr>
-								<td>Frequência semanal</td>
-								<td th:text="${avaliacao.frequenciaSemanal}"></td>
-							</tr>
-							<tr>
-								<td>Tempo disponível</td>
-								<td th:text="${avaliacao.tempoDisponivel}"></td>
-							</tr>
-						</table>
+					</table>
 
-						<!-- OBSERVAÇÕES -->
-						<h6 class="section-title mt-4">📝 Observações do Avaliador</h6>
-						<p th:text="${avaliacao.observacao}" class="text-muted"></p>
+					<!-- Atividade Física -->
+					<h6 class="section-title mt-4">🏋️ Atividade Física</h6>
+					<table class="table table-bordered table-sm">
+						<tr>
+							<td>Já fez musculação?</td>
+							<td th:text="${avaliacao.jaFezMusculacao}"></td>
+						</tr>
+						<tr>
+							<td>Tempo de musculação</td>
+							<td th:text="${avaliacao.tempoMusculacao}"></td>
+						</tr>
+						<tr>
+							<td>Inativo há</td>
+							<td th:text="${avaliacao.inativoHa}"></td>
+						</tr>
+						<tr>
+							<td>Frequência semanal</td>
+							<td th:text="${avaliacao.frequenciaSemanal}"></td>
+						</tr>
+						<tr>
+							<td>Tempo disponível</td>
+							<td th:text="${avaliacao.tempoDisponivel}"></td>
+						</tr>
+					</table>
+
+					<!-- Observações -->
+					<h6 class="section-title mt-4">📝 Observações do Avaliador</h6>
+					<p th:text="${avaliacao.observacao}" class="text-muted"></p>
 				</div>
 			</div>
+		</div>
 
-			<!-- Botão de voltar -->
-			<div class="text-center mt-4">
-				<a href="/" class="btn btn-outline-secondary btn-lg">
-					<i class="bi bi-arrow-left-circle"></i> Voltar ao Painel
-				</a>
-			</div>
+		<!-- Mensagem alternativa -->
+		<div th:if="${#lists.isEmpty(avaliacoes)}" class="alert alert-warning text-center mt-4">
+			<i class="bi bi-info-circle-fill me-1"></i>
+			Nenhuma avaliação física registrada para este aluno.
+		</div>
 
 
+	</div>
+	</div>
+	<!-- Botão de voltar ao final do formulário -->
+	<div class="text-center mt-5">
+		<a href="/" class="btn btn-outline-secondary btn-lg">
+			<i class="bi bi-arrow-left-circle"></i> Voltar ao Painel
+		</a>
+	</div>
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const body = document.body;
+			const toggle = document.getElementById('toggleDarkMode');
 
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-			<script>
-				document.addEventListener('DOMContentLoaded', function () {
-					const body = document.body;
-					const toggle = document.getElementById('toggleDarkMode');
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
 
-					if (localStorage.getItem('modoNoturno') === 'true') {
-						body.classList.add('dark-mode');
-					}
-
-					if (toggle) {
-						toggle.addEventListener('click', function () {
-							body.classList.toggle('dark-mode');
-							localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
-						});
-					}
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
 				});
-			</script>
+			}
+		});
+	</script>
 </body>
 
 </html>

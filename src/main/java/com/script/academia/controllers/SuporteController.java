@@ -53,7 +53,7 @@ public class SuporteController {
 		novaMensagem.setAssunto(assunto);
 		novaMensagem.setMensagem(mensagem);
 		novaMensagem.setDataEnvio(LocalDateTime.now());
-		novaMensagem.setUsuario(usuarioLogado); // ✅ vínculo direto
+		novaMensagem.setUsuario(usuarioLogado);
 
 		suporteRepository.save(novaMensagem);
 		attributes.addFlashAttribute("Mensagem", "Sua mensagem foi enviada com sucesso!");

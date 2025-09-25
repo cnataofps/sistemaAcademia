@@ -11,5 +11,7 @@ public interface AvaliacaoFisicaRepository extends JpaRepository<AvaliacaoFisica
 	List<AvaliacaoFisica> findByAluno_NomeContainingIgnoreCase(String nome);
 	AvaliacaoFisica findTopByAlunoOrderByDataDesc(Aluno aluno);
 	List<AvaliacaoFisica> findByAlunoOrderByDataDesc(Aluno aluno);
+	List<AvaliacaoFisica> findByAlunoIdOrderByDataDesc(Long alunoId);
+
 
 }

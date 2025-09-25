@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.script.academia.entities.Aluno;
 import com.script.academia.entities.AvaliacaoFisica;
+import com.script.academia.entities.Usuario;
 import com.script.academia.repository.AlunoRepository;
 import com.script.academia.repository.AvaliacaoFisicaRepository;
 import com.script.academia.security.UsuarioDetalhes;
@@ -27,7 +28,7 @@ public class AvaliacaoFisicaController {
 	private AlunoRepository alunoRepository;
 
 	// Método auxiliar para adicionar o nome do usuário logado ao modelo
-	
+
 	private void adicionarNomeUsuario(Model model) {
 		try {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -47,11 +48,17 @@ public class AvaliacaoFisicaController {
 	}
 
 	@PostMapping("/cadastrarAvaliacaoFisica")
-	public String salvarAvaliacaoFisica(@Valid AvaliacaoFisica avaliacaoFisica, BindingResult result, RedirectAttributes attributes) {
+	public String salvarAvaliacaoFisica(@Valid AvaliacaoFisica avaliacaoFisica, BindingResult result,
+			RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("Mensagem", "Preencher todos os campos necessário...");
 			return "redirect:/cadastrarAvaliacaoFisica";
 		}
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+		Usuario professorLogado = detalhes.getUsuario();
+		avaliacaoFisica.setProfessor(professorLogado);
 
 		avaliacaoFisicaRepository.save(avaliacaoFisica);
 		attributes.addFlashAttribute("Mensagem", "Avaliação cadastrada com sucesso!");
@@ -101,16 +108,16 @@ public class AvaliacaoFisicaController {
 
 	@PostMapping("/editarAvaliacaoFisica/{id}")
 	public String editarAvaliacao(@PathVariable Long id, @Valid AvaliacaoFisica nova, BindingResult result,
-			RedirectAttributes attributes) {
-		if (result.hasErrors()) {
-			attributes.addFlashAttribute("Mensagem", "Verifique os campos...");
-			return "redirect:/editarAvaliacaoFisica/" + id;
-		}
+	        RedirectAttributes attributes) {
+	    if (result.hasErrors()) {
+	        attributes.addFlashAttribute("Mensagem", "Verifique os campos...");
+	        return "redirect:/editarAvaliacaoFisica/" + id;
+	    }
 
-		Optional<AvaliacaoFisica> existente = avaliacaoFisicaRepository.findById(id);
-		if (existente.isPresent()) {
-			AvaliacaoFisica avaliacao = existente.get();
-
+	    Optional<AvaliacaoFisica> existente = avaliacaoFisicaRepository.findById(id);
+	    if (existente.isPresent()) {
+	        AvaliacaoFisica avaliacao = existente.get();
+	        // Atualiza campos da avaliação
 			avaliacao.setData(nova.getData());
 			avaliacao.setDataTroca(nova.getDataTroca());
 			avaliacao.setObjetivo(nova.getObjetivo());
@@ -149,20 +156,27 @@ public class AvaliacaoFisicaController {
 			avaliacao.setInativoHa(nova.getInativoHa());
 			avaliacao.setFrequenciaSemanal(nova.getFrequenciaSemanal());
 			avaliacao.setTempoDisponivel(nova.getTempoDisponivel());
-			avaliacao.setObservacao(nova.getObservacao()); 
-			
-			if (nova.getAluno() != null && nova.getAluno().getId() != null) {
-				Aluno aluno = alunoRepository.findById(nova.getAluno().getId()).orElse(null);
-				avaliacao.setAluno(aluno);
-			}
+			avaliacao.setObservacao(nova.getObservacao());
 
-			avaliacaoFisicaRepository.save(avaliacao);
-			attributes.addFlashAttribute("Mensagem", "Avaliação atualizada com sucesso!");
-		} else {
-			attributes.addFlashAttribute("Mensagem", "Avaliação não encontrada");
-		}
+			 // Atualiza aluno
+	        if (nova.getAluno() != null && nova.getAluno().getId() != null) {
+	            Aluno aluno = alunoRepository.findById(nova.getAluno().getId()).orElse(null);
+	            avaliacao.setAluno(aluno);
+	        }
 
-		return "redirect:/listarAvaliacoesFisica";
+	        // Atualiza professor logado
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+	        Usuario professorLogado = detalhes.getUsuario();
+	        avaliacao.setProfessor(professorLogado);
+
+	        avaliacaoFisicaRepository.save(avaliacao);
+	        attributes.addFlashAttribute("Mensagem", "Avaliação atualizada com sucesso!");
+	    } else {
+	        attributes.addFlashAttribute("Mensagem", "Avaliação não encontrada");
+	    }
+
+	    return "redirect:/listarAvaliacoesFisica";
 	}
 
 	@GetMapping("/deletarAvaliacaoFisica/{id}")
@@ -175,5 +189,15 @@ public class AvaliacaoFisicaController {
 		}
 
 		return "redirect:/listarAvaliacoesFisica";
+	}
+
+	@GetMapping("/todasAvaliacoes/{alunoId}")
+	public String visualizarTodasAvaliacoesDoAluno(@PathVariable Long alunoId, Model model) {
+		adicionarNomeUsuario(model);
+		Aluno aluno = alunoRepository.findById(alunoId).orElse(null);
+		List<AvaliacaoFisica> avaliacoes = avaliacaoFisicaRepository.findByAlunoIdOrderByDataDesc(alunoId);
+		model.addAttribute("aluno", aluno);
+		model.addAttribute("avaliacoes", avaliacoes);
+		return "avaliacoes/todasAvaliacoesDoAluno";
 	}
 }

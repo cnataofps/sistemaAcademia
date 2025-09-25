@@ -165,14 +165,15 @@
 							Olá, <span th:text="${nome}">Usuário</span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-							<li><a class="dropdown-item" href="/alterarDados"><i class="bi bi-gear"></i> Alterar
-									Dados</a></li>
-							<li><a class="dropdown-item" href="/configuracoes"><i class="bi bi-gear"></i>
-									Configurações</a></li>
-							<li><a class="dropdown-item" href="/atualizacoes"><i class="bi bi-arrow-repeat"></i>
-									Atualizações</a></li>
-							<li><a class="dropdown-item" href="/suporte"><i class="bi bi-life-preserver"></i>
-									Suporte</a></li>
+							<li><a class="dropdown-item" href="/alterarDados"><i class="bi bi-gear"></i> Alterar Dados</a>
+							</li>
+							<li><a class="dropdown-item" href="/configuracoes"><i class="bi bi-gear"></i> Configurações</a>
+							</li>
+							<li><a class="dropdown-item" href="/atualizacoes"><i class="bi bi-arrow-repeat"></i> Atualizações</a>
+							</li>
+							<li sec:authorize="hasAnyRole('ADMIN','PROFESSOR')">
+								<a class="dropdown-item" href="/suporte"><i class="bi bi-life-preserver"></i> Suporte</a>
+							</li>
 							<li><a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-right"></i> Sair</a>
 							</li>
 						</ul>

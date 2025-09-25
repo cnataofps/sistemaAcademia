@@ -17,12 +17,10 @@ import com.script.academia.entities.Aluno;
 import com.script.academia.entities.AvaliacaoFisica;
 import com.script.academia.entities.FichaDeTreinamento;
 import com.script.academia.entities.Perfil;
-import com.script.academia.entities.Treino;
 import com.script.academia.entities.Usuario;
 import com.script.academia.repository.AlunoRepository;
 import com.script.academia.repository.AvaliacaoFisicaRepository;
 import com.script.academia.repository.FichaDeTreinamentoRepository;
-import com.script.academia.repository.TreinoRepository;
 import com.script.academia.repository.UsuarioRepository;
 import com.script.academia.security.UsuarioDetalhes;
 import jakarta.validation.Valid;
@@ -32,8 +30,7 @@ public class AlunoController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	@Autowired
-	private TreinoRepository treinoRepository;
+	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	@Autowired
@@ -42,8 +39,7 @@ public class AlunoController {
 	private AvaliacaoFisicaRepository avaliacaoFisicaRepository;
 	@Autowired
 	private AlunoRepository alunoRepository;
-	
-	
+
 	// Obtém o objeto de autenticação do usuário atualmente logado no sistema.
 	// Isso permite acessar informações como nome, email e perfil do usuário.
 
@@ -56,7 +52,7 @@ public class AlunoController {
 			model.addAttribute("nome", "Usuário");
 		}
 	}
-	
+
 	// CADASTRAR ALUNO
 
 	@GetMapping("/cadastrarAlunos")
@@ -65,11 +61,12 @@ public class AlunoController {
 		model.addAttribute("aluno", new Aluno());
 		return "alunos/cadastrarAlunos";
 	}
-	
+
 	// CADASTRAR ALUNO
-	
+
 	@PostMapping("/cadastrarAlunos")
-	public String salvarAluno(@Valid Aluno aluno, BindingResult result, @RequestParam("senha") String senha, RedirectAttributes attributes) {
+	public String salvarAluno(@Valid Aluno aluno, BindingResult result, @RequestParam("senha") String senha,
+			RedirectAttributes attributes) {
 
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
@@ -188,18 +185,16 @@ public class AlunoController {
 	@GetMapping("/minhaFicha")
 	@PreAuthorize("hasRole('ALUNO')")
 	public String minhaFicha(Model model, Principal principal) {
-		adicionarNomeUsuario(model);
-		Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
-		Aluno aluno = usuario.getAluno();
+	    adicionarNomeUsuario(model);
+	    Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
+	    Aluno aluno = usuario.getAluno();
 
-		FichaDeTreinamento ficha = fichaDeTreinamentoRepository.findTopByAlunoOrderByDataCriacaoDesc(aluno);
-		List<Treino> treinos = treinoRepository.findByAluno(aluno);
+	    List<FichaDeTreinamento> fichas = fichaDeTreinamentoRepository.findByAlunoOrderByDataCriacaoDesc(aluno);
 
-		model.addAttribute("aluno", aluno);
-		model.addAttribute("ficha", ficha);
-		model.addAttribute("treinos", treinos);
+	    model.addAttribute("aluno", aluno);
+	    model.addAttribute("fichas", fichas);
 
-		return "minhaFicha";
+	    return "minhaFicha";
 	}
 
 	@GetMapping("/minhaAvaliacao")

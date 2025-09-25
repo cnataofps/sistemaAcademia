@@ -11,15 +11,13 @@ import com.script.academia.security.UsuarioDetalhes;
 @Service
 public class UsuarioService implements UserDetailsService {
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-	    return usuarioRepository.findByEmail(email)
-	        .map(UsuarioDetalhes::new)
-	        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-	}
-
-	
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmail(email)
+            .map(UsuarioDetalhes::new)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
 }

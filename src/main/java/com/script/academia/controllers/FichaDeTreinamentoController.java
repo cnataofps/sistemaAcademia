@@ -10,11 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.script.academia.entities.Aluno;
 import com.script.academia.entities.Exercicios;
 import com.script.academia.entities.FichaDeTreinamento;
 import com.script.academia.entities.Treino;
+import com.script.academia.entities.Usuario;
 import com.script.academia.repository.AlunoRepository;
 import com.script.academia.repository.FichaDeTreinamentoRepository;
+import com.script.academia.repository.UsuarioRepository;
 import com.script.academia.security.UsuarioDetalhes;
 import jakarta.validation.Valid;
 
@@ -26,6 +29,9 @@ public class FichaDeTreinamentoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	// Método auxiliar para adicionar o nome do usuário logado ao modelo
 	private void adicionarNomeUsuario(Model model) {
@@ -47,17 +53,29 @@ public class FichaDeTreinamentoController {
 	}
 
 	@PostMapping("/cadastrarFicha")
-	public String salvarFicha(@Valid FichaDeTreinamento ficha, BindingResult result, RedirectAttributes attributes) {
+	public String salvarFicha(@RequestParam("alunoId") Long alunoId, @Valid FichaDeTreinamento ficha,
+			BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("Mensagem", "Preencher todos os campos necessário...");
 			return "redirect:/cadastrarFicha";
 		}
 
+		// ✅ Cria nova ficha
+		ficha.setDataCriacao(java.time.LocalDate.now());
+
+		Aluno aluno = alunoRepository.findById(alunoId).orElse(null);
+		ficha.setAluno(aluno);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+		Usuario professorLogado = usuarioRepository.findById(detalhes.getUsuario().getId()).orElse(null);
+		ficha.setProfessor(professorLogado);
+
+		// ✅ Vincula treinos e exercícios
 		if (ficha.getTreinos() != null) {
 			for (Treino treino : ficha.getTreinos()) {
 				treino.setFicha(ficha);
-				treino.setAluno(ficha.getAluno()); // ✅ vincula o aluno ao treino
-
+				treino.setAluno(aluno);
 				if (treino.getExercicios() != null) {
 					for (Exercicios exercicio : treino.getExercicios()) {
 						exercicio.setTreino(treino);
@@ -66,7 +84,8 @@ public class FichaDeTreinamentoController {
 			}
 		}
 
-		fichaDeTreinamentoRepository.save(ficha);
+		fichaDeTreinamentoRepository.save(ficha); // ✅ salva como nova ficha
+
 		attributes.addFlashAttribute("Mensagem", "Ficha cadastrada com sucesso!");
 		return "redirect:/cadastrarFicha";
 	}
@@ -123,40 +142,35 @@ public class FichaDeTreinamentoController {
 		if (fichaOpt.isPresent()) {
 			FichaDeTreinamento fichaExistente = fichaOpt.get();
 
+			// Atualiza dados básicos
 			fichaExistente.setObjetivo(fichaAtualizada.getObjetivo());
 			fichaExistente.setDataCriacao(fichaAtualizada.getDataCriacao());
 			fichaExistente.setDataTroca(fichaAtualizada.getDataTroca());
 			fichaExistente.setAluno(fichaAtualizada.getAluno());
 
+			// ✅ Atualiza o professor logado como responsável pela edição
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+			Usuario professorLogado = usuarioRepository.findById(detalhes.getUsuario().getId()).orElse(null);
+			fichaExistente.setProfessor(professorLogado);
+
 			// Atualiza treinos
 			List<Treino> treinosAtualizados = fichaAtualizada.getTreinos();
 			List<Treino> treinosExistentes = fichaExistente.getTreinos();
 
-			// Mapeia treinos existentes por ID
 			java.util.Map<Long, Treino> mapaTreinos = new java.util.HashMap<>();
 			for (Treino t : treinosExistentes) {
 				mapaTreinos.put(t.getId(), t);
 			}
-
 			treinosExistentes.clear();
 
 			if (treinosAtualizados != null) {
 				for (Treino treinoNovo : treinosAtualizados) {
-					Treino treinoFinal;
-
-					if (treinoNovo.getId() != null && mapaTreinos.containsKey(treinoNovo.getId())) {
-						// Atualiza treino existente
-						treinoFinal = mapaTreinos.get(treinoNovo.getId());
-					} else {
-						// Novo treino
-						treinoFinal = new Treino();
-					}
-
+					Treino treinoFinal = mapaTreinos.getOrDefault(treinoNovo.getId(), new Treino());
 					treinoFinal.setNome(treinoNovo.getNome());
 					treinoFinal.setFicha(fichaExistente);
 					treinoFinal.setAluno(fichaAtualizada.getAluno());
 
-					// Atualiza exercícios
 					List<Exercicios> exerciciosAtualizados = treinoNovo.getExercicios();
 					List<Exercicios> exerciciosExistentes = treinoFinal.getExercicios() != null
 							? treinoFinal.getExercicios()
@@ -166,26 +180,18 @@ public class FichaDeTreinamentoController {
 					for (Exercicios e : exerciciosExistentes) {
 						mapaExercicios.put(e.getId(), e);
 					}
-
 					exerciciosExistentes.clear();
 
 					if (exerciciosAtualizados != null) {
 						for (Exercicios exercicioNovo : exerciciosAtualizados) {
-							Exercicios exercicioFinal;
-
-							if (exercicioNovo.getId() != null && mapaExercicios.containsKey(exercicioNovo.getId())) {
-								exercicioFinal = mapaExercicios.get(exercicioNovo.getId());
-							} else {
-								exercicioFinal = new Exercicios();
-							}
-
+							Exercicios exercicioFinal = mapaExercicios.getOrDefault(exercicioNovo.getId(),
+									new Exercicios());
 							exercicioFinal.setNome(exercicioNovo.getNome());
 							exercicioFinal.setSerie(exercicioNovo.getSerie());
 							exercicioFinal.setRepeticoes(exercicioNovo.getRepeticoes());
 							exercicioFinal.setCarga(exercicioNovo.getCarga());
 							exercicioFinal.setObservacao(exercicioNovo.getObservacao());
 							exercicioFinal.setTreino(treinoFinal);
-
 							exerciciosExistentes.add(exercicioFinal);
 						}
 					}
@@ -214,5 +220,13 @@ public class FichaDeTreinamentoController {
 		}
 
 		return "redirect:/listarFichas";
+	}
+
+	@GetMapping("/todasFichas/{alunoId}")
+	public String visualizarTodasFichasDoAluno(@PathVariable Long alunoId, Model model) {
+		adicionarNomeUsuario(model);
+		List<FichaDeTreinamento> fichas = fichaDeTreinamentoRepository.findByAlunoIdOrderByDataCriacaoDesc(alunoId);
+		model.addAttribute("fichas", fichas);
+		return "minhaFicha";
 	}
 }

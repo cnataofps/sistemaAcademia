@@ -1,6 +1,9 @@
 package com.script.academia.entities;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,153 +13,84 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
-
 @Entity
 public class AvaliacaoFisica {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private LocalDate data;
-	@NotNull(message = "Data de troca é obrigatória")
-	private LocalDate dataTroca;
-	private String objetivo;
-	@Column(columnDefinition = "TEXT")
-	private String observacao;
-	
-	// PERIMETRIA
-	
-	private String torax;
-	private String abdominal;
-	private String quadril;
-	private String antebraco;
-	private String bracorelaxado;
-	private String bracocontraido;
-	private String coxasuperior;
-	private String panturilha;
-	
-	// ANTROPOMETRIA
-	
-	private String tricipal;
-	private String subescapular;
-	private String peitoral;
-	private String abdomen;
-	private String suprailiaca;
-	private String coxa;
-	private String axialmedia;
-	
-		
-	private Double peso;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private LocalDate data;
+
+    @NotNull(message = "Data de troca é obrigatória")
+    private LocalDate dataTroca;
+
+    private String objetivo;
+
+    @Column(columnDefinition = "TEXT")
+    private String observacao;
+
+    // PERIMETRIA
+    private String torax;
+    private String abdominal;
+    private String quadril;
+    private String antebraco;
+    private String bracorelaxado;
+    private String bracocontraido;
+    private String coxasuperior;
+    private String panturilha;
+
+    // ANTROPOMETRIA
+    private String tricipal;
+    private String subescapular;
+    private String peitoral;
+    private String abdomen;
+    private String suprailiaca;
+    private String coxa;
+    private String axialmedia;
+
+    private Double peso;
     private Double altura;
     private Double imc;
     private String percentualgordura;
     private String massamagra;
     private String massagorda;
-    
- // HISTORICO PESSOAL
-    
+
+    // HISTÓRICO PESSOAL
     private String problemaArticular;
     private String cirurgia;
     private String coluna;
 
-    // HISTORICO FAMILIAR
-    
+    // HISTÓRICO FAMILIAR
     private String cardiopata;
     private String hipertenso;
     private String diabetico;
 
     // HÁBITOS PESSOAIS
-    
     private String fuma;
     private String bebe;
     private String toxico;
 
-    // ATIVIDADE FISICA
-    
+    // ATIVIDADE FÍSICA
     private String jaFezMusculacao;
     private String tempoMusculacao;
     private String inativoHa;
     private String frequenciaSemanal;
     private String tempoDisponivel;
-    
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "aluno_id")
-	private Aluno aluno;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    @JsonIgnoreProperties({"senha", "perfil", "email"})
+    private Usuario professor;
 	
 	
 	// CONSTRUTOR VAZIO.
 	public AvaliacaoFisica() {
 		
-	}
-
-
-	public AvaliacaoFisica(Long id, LocalDate data, LocalDate dataTroca, String objetivo, String observacao, String torax,
-			String abdominal, String quadril, String antebraco, String bracorelaxado, String bracocontraido,
-			String coxasuperior, String panturilha, String tricipal, String subescapular, String peitoral,
-			String abdomen, String suprailiaca, String coxa, String axialmedia, Double peso, Double altura, Double imc,
-			String percentualgordura, String massamagra, String massagorda, String problemaArticular, String cirurgia,
-			String coluna, String cardiopata, String hipertenso, String diabetico, String fuma, String bebe,
-			String toxico, String jaFezMusculacao, String tempoMusculacao, String inativoHa, String frequenciaSemanal,
-			String tempoDisponivel, Aluno aluno) {
-		super();
-		this.id = id;
-		this.data = data;
-		this.dataTroca = dataTroca;
-		this.objetivo = objetivo;
-		this.observacao = observacao;
-		this.torax = torax;
-		this.abdominal = abdominal;
-		this.quadril = quadril;
-		this.antebraco = antebraco;
-		this.bracorelaxado = bracorelaxado;
-		this.bracocontraido = bracocontraido;
-		this.coxasuperior = coxasuperior;
-		this.panturilha = panturilha;
-		this.tricipal = tricipal;
-		this.subescapular = subescapular;
-		this.peitoral = peitoral;
-		this.abdomen = abdomen;
-		this.suprailiaca = suprailiaca;
-		this.coxa = coxa;
-		this.axialmedia = axialmedia;
-		this.peso = peso;
-		this.altura = altura;
-		this.imc = imc;
-		this.percentualgordura = percentualgordura;
-		this.massamagra = massamagra;
-		this.massagorda = massagorda;
-		this.problemaArticular = problemaArticular;
-		this.cirurgia = cirurgia;
-		this.coluna = coluna;
-		this.cardiopata = cardiopata;
-		this.hipertenso = hipertenso;
-		this.diabetico = diabetico;
-		this.fuma = fuma;
-		this.bebe = bebe;
-		this.toxico = toxico;
-		this.jaFezMusculacao = jaFezMusculacao;
-		this.tempoMusculacao = tempoMusculacao;
-		this.inativoHa = inativoHa;
-		this.frequenciaSemanal = frequenciaSemanal;
-		this.tempoDisponivel = tempoDisponivel;
-		this.aluno = aluno;
-	}
-
-
-	@Override
-	public String toString() {
-		return "AvaliacaoFisica [id=" + id + ", data=" + data + ", dataTroca=" + dataTroca + ", objetivo=" + objetivo
-				+ ", observacao=" + observacao + ", torax=" + torax + ", abdominal=" + abdominal + ", quadril="
-				+ quadril + ", antebraco=" + antebraco + ", bracorelaxado=" + bracorelaxado + ", bracocontraido="
-				+ bracocontraido + ", coxasuperior=" + coxasuperior + ", panturilha=" + panturilha + ", tricipal="
-				+ tricipal + ", subescapular=" + subescapular + ", peitoral=" + peitoral + ", abdomen=" + abdomen
-				+ ", suprailiaca=" + suprailiaca + ", coxa=" + coxa + ", axialmedia=" + axialmedia + ", peso=" + peso
-				+ ", altura=" + altura + ", imc=" + imc + ", percentualgordura=" + percentualgordura + ", massamagra="
-				+ massamagra + ", massagorda=" + massagorda + ", problemaArticular=" + problemaArticular + ", cirurgia="
-				+ cirurgia + ", coluna=" + coluna + ", cardiopata=" + cardiopata + ", hipertenso=" + hipertenso
-				+ ", diabetico=" + diabetico + ", fuma=" + fuma + ", bebe=" + bebe + ", toxico=" + toxico
-				+ ", jaFezMusculacao=" + jaFezMusculacao + ", tempoMusculacao=" + tempoMusculacao + ", inativoHa="
-				+ inativoHa + ", frequenciaSemanal=" + frequenciaSemanal + ", tempoDisponivel=" + tempoDisponivel
-				+ ", aluno=" + aluno + "]";
 	}
 
 
@@ -568,6 +502,43 @@ public class AvaliacaoFisica {
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
 	}
+
+
+	public Usuario getProfessor() {
+		return professor;
+	}
+
+
+	public void setProfessor(Usuario professor) {
+		this.professor = professor;
+	}
+	
+	public String getNomeDoProfessor() {
+        return professor != null ? professor.getNome() : null;
+    }
+
+
+	@Override
+	public String toString() {
+		return "AvaliacaoFisica [id=" + id + ", data=" + data + ", dataTroca=" + dataTroca + ", objetivo=" + objetivo
+				+ ", observacao=" + observacao + ", torax=" + torax + ", abdominal=" + abdominal + ", quadril="
+				+ quadril + ", antebraco=" + antebraco + ", bracorelaxado=" + bracorelaxado + ", bracocontraido="
+				+ bracocontraido + ", coxasuperior=" + coxasuperior + ", panturilha=" + panturilha + ", tricipal="
+				+ tricipal + ", subescapular=" + subescapular + ", peitoral=" + peitoral + ", abdomen=" + abdomen
+				+ ", suprailiaca=" + suprailiaca + ", coxa=" + coxa + ", axialmedia=" + axialmedia + ", peso=" + peso
+				+ ", altura=" + altura + ", imc=" + imc + ", percentualgordura=" + percentualgordura + ", massamagra="
+				+ massamagra + ", massagorda=" + massagorda + ", problemaArticular=" + problemaArticular + ", cirurgia="
+				+ cirurgia + ", coluna=" + coluna + ", cardiopata=" + cardiopata + ", hipertenso=" + hipertenso
+				+ ", diabetico=" + diabetico + ", fuma=" + fuma + ", bebe=" + bebe + ", toxico=" + toxico
+				+ ", jaFezMusculacao=" + jaFezMusculacao + ", tempoMusculacao=" + tempoMusculacao + ", inativoHa="
+				+ inativoHa + ", frequenciaSemanal=" + frequenciaSemanal + ", tempoDisponivel=" + tempoDisponivel
+				+ ", aluno=" + aluno + ", professor=" + professor + ", professor=" + getNomeDoProfessor() + "]";
+	}
+
+
+	
+	
+	
 
 
 			

@@ -224,6 +224,7 @@
 								<th>Data Criação</th>
 								<th>Data Troca</th>
 								<th>Objetivo</th>
+								<th>Professor</th>
 								<th>Ações</th>
 
 							</tr>
@@ -236,6 +237,7 @@
 								<td th:text="${fichaDeTreinamento.dataCriacao}">Data Criação</td>
 								<td th:text="${fichaDeTreinamento.dataTroca}">Data Troca</td>
 								<td th:text="${fichaDeTreinamento.objetivo}">Objetivo</td>
+								<td th:text="${fichaDeTreinamento.professor != null ? fichaDeTreinamento.professor.nome : 'Não definido'}">Professor</td>
 								<td>
 									<a th:href="@{'/editarFicha/' + ${fichaDeTreinamento.id}}"
 										class="btn btn-sm btn-warning me-1">
