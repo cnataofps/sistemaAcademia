@@ -212,10 +212,10 @@
 					<div class="form-group col-md-6">
 						<label for="alunoId">Aluno</label>
 						<select name="alunoId" id="alunoId" class="form-control" required>
-						    <option value="">Selecione o aluno</option>
-						    <th:block th:each="aluno : ${alunos}">
-						        <option th:value="${aluno.id}" th:text="${aluno.nome}"></option>
-						    </th:block>
+							<option value="">Selecione o aluno</option>
+							<th:block th:each="aluno : ${alunos}">
+								<option th:value="${aluno.id}" th:text="${aluno.nome}"></option>
+							</th:block>
 						</select>
 					</div>
 					<div class="form-group col-md-6">
@@ -376,6 +376,9 @@
 			}
 		});
 	</script>
+
+	<!-- RODAPÉ -->
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>

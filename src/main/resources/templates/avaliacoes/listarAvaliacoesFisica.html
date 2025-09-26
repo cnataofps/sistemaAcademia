@@ -229,14 +229,17 @@
 								<th>IMC</th>
 								<th>Data</th>
 								<th>Data Troca</th>
-								<th>Ações</th> 
+								<th>Ações</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="avaliacao : ${avaliacoes}">
 								<td th:text="${avaliacao.id}">ID</td>
-								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.matricula : 'Matricula não definida'}">Matricula</td>
-								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.nome : 'Aluno não definido'}">Aluno</td>
+								<td
+									th:text="${avaliacao.aluno != null ? avaliacao.aluno.matricula : 'Matricula não definida'}">
+									Matricula</td>
+								<td th:text="${avaliacao.aluno != null ? avaliacao.aluno.nome : 'Aluno não definido'}">
+									Aluno</td>
 								<td th:text="${avaliacao.peso}">Peso</td>
 								<td th:text="${#numbers.formatDecimal(avaliacao.altura, 1, 2)}">Altura</td>
 								<td th:text="${avaliacao.imc}">IMC</td>
@@ -295,6 +298,9 @@
 			}
 		});
 	</script>
+
+	<!-- RODAPÉ -->
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>

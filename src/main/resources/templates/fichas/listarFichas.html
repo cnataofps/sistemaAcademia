@@ -232,12 +232,18 @@
 						<tbody>
 							<tr th:each="fichaDeTreinamento : ${fichas}">
 								<td th:text="${fichaDeTreinamento.id}">ID</td>
-								<td th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.matricula : 'Sem matrícula'}">Matrícula</td>
-								<td th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.nome : 'Ficha de Treinamento não definida'}"> Aluno</td>
+								<td
+									th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.matricula : 'Sem matrícula'}">
+									Matrícula</td>
+								<td
+									th:text="${fichaDeTreinamento.aluno != null ? fichaDeTreinamento.aluno.nome : 'Ficha de Treinamento não definida'}">
+									Aluno</td>
 								<td th:text="${fichaDeTreinamento.dataCriacao}">Data Criação</td>
 								<td th:text="${fichaDeTreinamento.dataTroca}">Data Troca</td>
 								<td th:text="${fichaDeTreinamento.objetivo}">Objetivo</td>
-								<td th:text="${fichaDeTreinamento.professor != null ? fichaDeTreinamento.professor.nome : 'Não definido'}">Professor</td>
+								<td
+									th:text="${fichaDeTreinamento.professor != null ? fichaDeTreinamento.professor.nome : 'Não definido'}">
+									Professor</td>
 								<td>
 									<a th:href="@{'/editarFicha/' + ${fichaDeTreinamento.id}}"
 										class="btn btn-sm btn-warning me-1">
@@ -290,6 +296,9 @@
 			}
 		});
 	</script>
+
+	<!-- RODAPÉ -->
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>

@@ -45,6 +45,10 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**", "/suporte/receber").hasRole("ADMIN")
                 .requestMatchers("/suporte/enviar").hasAnyRole("ADMIN", "PROFESSOR")
                 .requestMatchers("/aluno/minhaFicha", "/aluno/minhaAvaliacao").hasRole("ALUNO")
+                
+                // Acesso a Login e CadastrarUsuario
+                .requestMatchers("/img/**", "/css/**", "/js/**", "/webjars/**").permitAll()
+                
 
                 .anyRequest().authenticated()
             )

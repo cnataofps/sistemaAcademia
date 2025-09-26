@@ -68,8 +68,9 @@
 			<div th:if="${#lists.isEmpty(fichas) == false}">
 				<div th:each="ficha : ${fichas}" class="card shadow-sm mb-5">
 					<div class="card-header bg-primary text-white">
-						<i class="bi bi-person-badge-fill me-2"></i>Ficha de <span th:text="${#temporals.format(ficha.dataCriacao, 'dd/MM/yyyy')}"></span>
-						
+						<i class="bi bi-person-badge-fill me-2"></i>Ficha de <span
+							th:text="${#temporals.format(ficha.dataCriacao, 'dd/MM/yyyy')}"></span>
+
 					</div>
 					<div class="card-body">
 						<div class="row g-3 mb-3">
@@ -150,6 +151,9 @@
 			}
 		});
 	</script>
+
+	<!-- RODAPÉ -->
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>
