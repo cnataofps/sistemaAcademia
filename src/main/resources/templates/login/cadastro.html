@@ -223,6 +223,71 @@
 			});
 		});
 	</script>
+	
+	<!-- Scripts  Valiadação de todos os campos do formulário -->
+	
+	<script>
+	    $(document).ready(function () {
+	        // Alternância de visibilidade da senha
+	        $('.toggle-password').click(function () {
+	            const input = $($(this).data('target'));
+	            const icon = $(this).find('i');
+
+	            if (input.attr('type') === 'password') {
+	                input.attr('type', 'text');
+	                icon.removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
+	            } else {
+	                input.attr('type', 'password');
+	                icon.removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
+	            }
+	        });
+
+	        // Validação do formulário
+	        $('form').on('submit', function (e) {
+	            let isValid = true;
+	            let nome = $('#username').val().trim();
+	            let email = $('#email').val().trim();
+	            let senha = $('#password').val();
+	            let confirmarSenha = $('#confirmPassword').val();
+	            let perfil = $('#perfil').val();
+
+	            // Validação do nome
+	            if (nome === '') {
+	                alert('Por favor, preencha o nome de usuário.');
+	                isValid = false;
+	            }
+
+	            // Validação do e-mail
+	            if (email === '' || !/^\S+@\S+\.\S+$/.test(email)) {
+	                alert('Por favor, insira um e-mail válido.');
+	                isValid = false;
+	            }
+
+	            // Validação da senha
+	            if (senha.length < 6) {
+	                alert('A senha deve ter pelo menos 6 caracteres.');
+	                isValid = false;
+	            }
+
+	            // Validação da confirmação de senha
+	            if (senha !== confirmarSenha) {
+	                alert('As senhas não coincidem.');
+	                isValid = false;
+	            }
+
+	            // Validação do perfil
+	            if (perfil === '') {
+	                alert('Por favor, selecione um perfil.');
+	                isValid = false;
+	            }
+
+	            if (!isValid) {
+	                e.preventDefault(); // Impede o envio do formulário
+	            }
+	        });
+	    });
+	</script>
+
 </body>
 
 </html>

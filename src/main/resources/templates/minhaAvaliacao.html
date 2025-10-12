@@ -10,6 +10,8 @@
 	<style>
 		body {
 			background-color: #f8f9fa;
+			color: #212529;
+			font-family: 'Inter', 'Roboto', sans-serif;
 		}
 
 		.card-header {
@@ -32,27 +34,64 @@
 			color: #e0e0e0;
 		}
 
-		body.dark-mode .card {
-			background-color: #2a2a2a;
-			color: #e0e0e0;
+		body.dark-mode .card,
+		body.dark-mode .card-body,
+		body.dark-mode .card-header,
+		body.dark-mode .container,
+		body.dark-mode .content-area,
+		body.dark-mode .row,
+		body.dark-mode .col-md-4,
+		body.dark-mode .col-md-6,
+		body.dark-mode .col-12 {
+			background-color: #1e1e1e !important;
+			color: #e0e0e0 !important;
 		}
 
-		body.dark-mode .card-header {
-			background-color: #0d6efd;
-			color: white;
+		body.dark-mode .card-header,
+		body.dark-mode .bg-primary {
+			background-color: #0d6efd !important;
+			color: white !important;
 		}
 
-		body.dark-mode .table {
-			color: #e0e0e0;
+		body.dark-mode .section-title,
+		body.dark-mode h1,
+		body.dark-mode h2,
+		body.dark-mode h6,
+		body.dark-mode strong,
+		body.dark-mode span {
+			color: #66b2ff !important;
 		}
 
-		body.dark-mode .table th {
-			background-color: #333;
-			color: #ccc;
+		body.dark-mode .table,
+		body.dark-mode table,
+		body.dark-mode td,
+		body.dark-mode th {
+			background-color: #1e1e1e !important;
+			color: #e0e0e0 !important;
+			border-color: #444 !important;
 		}
 
-		body.dark-mode .section-title {
-			color: #66b2ff;
+		body.dark-mode .text-muted,
+		body.dark-mode p {
+			color: #b0b0b0 !important;
+		}
+
+		body.dark-mode .btn-outline-secondary {
+			border-color: #ccc !important;
+			color: #ccc !important;
+		}
+
+		body.dark-mode .btn-outline-secondary:hover {
+			background-color: #ccc !important;
+			color: #121212 !important;
+		}
+
+		body.dark-mode .btn {
+			color: #fff !important;
+		}
+
+		body.dark-mode i.bi {
+			color: #e0e0e0 !important;
 		}
 	</style>
 </head>
@@ -63,16 +102,12 @@
 		<div th:replace="~{painel :: sidebar}"></div>
 		<div class="content-area container py-5">
 			<h2 class="mb-4 text-center"><i class="bi bi-clipboard-pulse"></i> Minhas Avaliações Físicas</h2>
-
 			<div th:if="${avaliacoes != null and #lists.isEmpty(avaliacoes)}" class="alert alert-warning text-center">
 				<i class="bi bi-info-circle-fill me-1"></i> Nenhuma avaliação física registrada para este aluno.
 			</div>
-
-			<div th:each="avaliacao : ${avaliacoes}" class="card shadow-sm mb-5">
-				<!-- Cabeçalho com dados do aluno -->
-				<div class="card-header bg-primary text-white">
-					<i class="bi bi-person-badge-fill me-2"></i> Informações da Avaliação
-				</div>
+			<div th:each="avaliacao : ${avaliacoes}" class="card shadow-sm mb-5"> <!-- Cabeçalho com dados do aluno -->
+				<div class="card-header bg-primary text-white"> <i class="bi bi-person-badge-fill me-2"></i> Informações
+					da Avaliação </div>
 				<div class="card-body">
 					<div class="row mb-3">
 						<div class="col-md-4"><strong>Nome:</strong> <span th:text="${avaliacao.aluno.nome}"></span>
@@ -87,13 +122,10 @@
 						<div class="col-md-4"><strong>Objetivo:</strong> <span th:text="${avaliacao.objetivo}"></span>
 						</div>
 						<div class="col-md-4"><strong>Data de Criação:</strong> <span
-								th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}"></span>
-						</div>
+								th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}"></span> </div>
 						<div class="col-md-4"><strong>Troca Prevista:</strong> <span
-								th:text="${#temporals.format(avaliacao.dataTroca, 'dd/MM/yyyy')}"></span>
-						</div>
+								th:text="${#temporals.format(avaliacao.dataTroca, 'dd/MM/yyyy')}"></span> </div>
 					</div>
-
 					<!-- PERIMETRIA -->
 					<h6 class="section-title mt-4">📏 Perimetria</h6>
 					<table class="table table-bordered table-sm">
@@ -130,7 +162,6 @@
 							<td th:text="${avaliacao.panturilha}"></td>
 						</tr>
 					</table>
-
 					<!-- ANTROPOMETRIA -->
 					<h6 class="section-title mt-4">📐 Antropometria</h6>
 					<table class="table table-bordered table-sm">
@@ -163,7 +194,6 @@
 							<td th:text="${avaliacao.axialmedia}"></td>
 						</tr>
 					</table>
-
 					<!-- DADOS FÍSICOS -->
 					<h6 class="section-title mt-4">⚖️ Dados Físicos</h6>
 					<table class="table table-bordered table-sm">
@@ -192,7 +222,6 @@
 							<td th:text="${avaliacao.massagorda}"></td>
 						</tr>
 					</table>
-
 					<!-- HISTÓRICO PESSOAL -->
 					<h6 class="section-title mt-4">🩺 Histórico Pessoal</h6>
 					<table class="table table-bordered table-sm">
@@ -209,7 +238,6 @@
 							<td th:text="${avaliacao.coluna}"></td>
 						</tr>
 					</table>
-
 					<!-- HISTÓRICO FAMILIAR -->
 					<h6 class="section-title mt-4">👨‍👩‍👧 Histórico Familiar</h6>
 					<table class="table table-bordered table-sm">
@@ -226,7 +254,6 @@
 							<td th:text="${avaliacao.diabetico}"></td>
 						</tr>
 					</table>
-
 					<!-- HÁBITOS PESSOAIS -->
 					<h6 class="section-title mt-4">🧠 Hábitos Pessoais</h6>
 					<table class="table table-bordered table-sm">
@@ -242,67 +269,65 @@
 							<td>Uso de Substâncias</td>
 							<td th:text="${avaliacao.toxico}"></td>
 						</tr>
-						<!-- ATIVIDADE FÍSICA -->
-						<h6 class="section-title mt-4">🏋️ Atividade Física</h6>
-						<table class="table table-bordered table-sm">
-							<tr>
-								<td>Já fez musculação?</td>
-								<td th:text="${avaliacao.jaFezMusculacao}"></td>
-							</tr>
-							<tr>
-								<td>Tempo de musculação</td>
-								<td th:text="${avaliacao.tempoMusculacao}"></td>
-							</tr>
-							<tr>
-								<td>Inativo há</td>
-								<td th:text="${avaliacao.inativoHa}"></td>
-							</tr>
-							<tr>
-								<td>Frequência semanal</td>
-								<td th:text="${avaliacao.frequenciaSemanal}"></td>
-							</tr>
-							<tr>
-								<td>Tempo disponível</td>
-								<td th:text="${avaliacao.tempoDisponivel}"></td>
-							</tr>
-						</table>
+					</table>
+					<!-- ATIVIDADE FÍSICA -->
+					<h6 class="section-title mt-4">🏋️ Atividade Física</h6>
+					<table class="table table-bordered table-sm">
+						<tr>
+							<td>Já fez musculação?</td>
+							<td th:text="${avaliacao.jaFezMusculacao}"></td>
+						</tr>
+						<tr>
+							<td>Tempo de musculação</td>
+							<td th:text="${avaliacao.tempoMusculacao}"></td>
+						</tr>
+						<tr>
+							<td>Inativo há</td>
+							<td th:text="${avaliacao.inativoHa}"></td>
+						</tr>
+						<tr>
+							<td>Frequência semanal</td>
+							<td th:text="${avaliacao.frequenciaSemanal}"></td>
+						</tr>
+						<tr>
+							<td>Tempo disponível</td>
+							<td th:text="${avaliacao.tempoDisponivel}"></td>
+						</tr>
+					</table>
+					<!-- OBSERVAÇÕES -->
+					<h6 class="section-title mt-4">📝 Observações do Avaliador</h6>
+					<p th:text="${avaliacao.observacao}" class="text-card"></p>
+				</div> <!-- Fecha card-body -->
+			</div> <!-- Fecha card -->
+		</div> <!-- Fecha content-area -->
+	</div> <!-- Fecha main-layout -->
 
-						<!-- OBSERVAÇÕES -->
-						<h6 class="section-title mt-4">📝 Observações do Avaliador</h6>
-						<p th:text="${avaliacao.observacao}" class="text-muted"></p>
-				</div>
-			</div>
+	<div class="text-center mt-4">
+		<a href="/" class="btn btn-outline-secondary btn-lg">
+			<i class="bi bi-arrow-left-circle"></i> Voltar ao Painel
+		</a>
+	</div>
 
-			<!-- Botão de voltar -->
-			<div class="text-center mt-4">
-				<a href="/" class="btn btn-outline-secondary btn-lg">
-					<i class="bi bi-arrow-left-circle"></i> Voltar ao Painel
-				</a>
-			</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const body = document.body;
+			const toggle = document.getElementById('toggleDarkMode');
 
+			if (localStorage.getItem('modoNoturno') === 'true') {
+				body.classList.add('dark-mode');
+			}
 
-
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-			<script>
-				document.addEventListener('DOMContentLoaded', function () {
-					const body = document.body;
-					const toggle = document.getElementById('toggleDarkMode');
-
-					if (localStorage.getItem('modoNoturno') === 'true') {
-						body.classList.add('dark-mode');
-					}
-
-					if (toggle) {
-						toggle.addEventListener('click', function () {
-							body.classList.toggle('dark-mode');
-							localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
-						});
-					}
+			if (toggle) {
+				toggle.addEventListener('click', function () {
+					body.classList.toggle('dark-mode');
+					localStorage.setItem('modoNoturno', body.classList.contains('dark-mode'));
 				});
-			</script>
+			}
+		});
+	</script>
 
-			<!-- RODAPÉ -->
-			<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 
 </html>

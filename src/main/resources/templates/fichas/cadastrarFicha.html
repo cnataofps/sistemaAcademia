@@ -248,45 +248,54 @@
 		let exercicioContador = {};
 
 		function adicionarTreino() {
-			const tabId = `treino-${treinoIndex}`;
-			const tabLabel = String.fromCharCode(65 + treinoIndex); // A, B, C...
+			const letrasUsadas = Array.from(document.querySelectorAll('#treinoTabs .nav-link'))
+				.map(el => el.textContent.trim().replace('Treino ', ''));
+
+			const alfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+			const letraLivre = alfabeto.find(letra => !letrasUsadas.includes(letra));
+
+			if (!letraLivre) {
+				alert('Limite de treinos atingido.');
+				return;
+			}
+
+			const tabId = `treino-${letraLivre}`;
+			const tabIndex = treinoIndex++; // ainda usamos índice para nome dos campos
 
 			// Aba com campo editável
 			const tab = document.createElement('li');
 			tab.className = 'nav-item';
-			tab.id = `tab-item-${treinoIndex}`;
+			tab.id = `tab-item-${tabIndex}`;
 			tab.innerHTML = `
-        <div class="treino-header">
-			<input type="text" class="form-control form-control-sm" 
-			       name="treinos[${treinoIndex}].nome"
-			       value="Treino ${tabLabel}" 
-			       oninput="atualizarNomeAba(${treinoIndex}, this.value)" 
-			       title="Editar nome do treino" />
-          <button class="nav-link ${treinoIndex === 0 ? 'active' : ''}" id="${tabId}-tab" 
-                  data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">
-            Treino ${tabLabel}
-          </button>
-          <button type="button" class="btn btn-sm btn-danger" onclick="removerTreino(${treinoIndex})" title="Excluir Treino">
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
-      `;
+		        <div class="treino-header">
+		            <input type="text" class="form-control form-control-sm" 
+		                   name="treinos[${tabIndex}].nome"
+		                   value="Treino ${letraLivre}" 
+		                   oninput="atualizarNomeAba(${tabIndex}, this.value)" 
+		                   title="Editar nome do treino" />
+		            <button class="nav-link ${tabIndex === 0 ? 'active' : ''}" id="${tabId}-tab" 
+		                    data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">
+		                Treino ${letraLivre}
+		            </button>
+		            <button type="button" class="btn btn-sm btn-danger" onclick="removerTreino(${tabIndex})" title="Excluir Treino">
+		                <i class="bi bi-trash"></i>
+		            </button>
+		        </div>
+		    `;
 			document.getElementById('treinoTabs').appendChild(tab);
 
 			// Conteúdo da aba
 			const content = document.createElement('div');
-			content.className = `tab-pane fade ${treinoIndex === 0 ? 'show active' : ''}`;
+			content.className = `tab-pane fade ${tabIndex === 0 ? 'show active' : ''}`;
 			content.id = tabId;
 			content.setAttribute('role', 'tabpanel');
 			content.innerHTML = `
-        <div id="exercicios-${treinoIndex}"></div>
-        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="adicionarExercicio(${treinoIndex})">
-          <i class="bi bi-plus-circle"></i> Adicionar Exercício
-        </button>
-      `;
+		        <div id="exercicios-${tabIndex}"></div>
+		        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="adicionarExercicio(${tabIndex})">
+		            <i class="bi bi-plus-circle"></i> Adicionar Exercício
+		        </button>
+		    `;
 			document.getElementById('treinoContent').appendChild(content);
-
-			treinoIndex++;
 		}
 
 		function atualizarNomeAba(index, novoNome) {

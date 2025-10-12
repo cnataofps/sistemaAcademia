@@ -48,8 +48,7 @@ public class AvaliacaoFisicaController {
 	}
 
 	@PostMapping("/cadastrarAvaliacaoFisica")
-	public String salvarAvaliacaoFisica(@Valid AvaliacaoFisica avaliacaoFisica, BindingResult result,
-			RedirectAttributes attributes) {
+	public String salvarAvaliacaoFisica(@Valid AvaliacaoFisica avaliacaoFisica, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("Mensagem", "Preencher todos os campos necessário...");
 			return "redirect:/cadastrarAvaliacaoFisica";

@@ -3,6 +3,99 @@
 
 <head th:replace="~{painel :: header}">
 	<title>Dashboard Admin</title>
+	<style>
+		/* Modo Noturno */
+		body.dark-mode {
+			background-color: #121212;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .sidebar {
+			background-color: #1f1f1f;
+			border-color: #444;
+		}
+
+		body.dark-mode .sidebar .nav-link {
+			color: #ccc;
+		}
+
+		body.dark-mode .sidebar .nav-link:hover {
+			background-color: #333;
+			color: #0d6efd;
+		}
+
+		body.dark-mode .sidebar .nav-link.active {
+			background-color: #0d6efd;
+			color: white;
+		}
+
+		body.dark-mode .content-area,
+		body.dark-mode .container {
+			background-color: #1e1e1e;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .card {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-label {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .form-control {
+			background-color: #2a2a2a;
+			color: #e0e0e0;
+			border-color: #555;
+		}
+
+		body.dark-mode .form-control::placeholder {
+			color: #aaa;
+		}
+
+		body.dark-mode .btn {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .btn-success {
+			background-color: #198754;
+			color: #fff;
+		}
+
+		body.dark-mode .btn-info {
+			background-color: #0dcaf0;
+			color: #fff;
+		}
+
+		body.dark-mode .btn-warning {
+			background-color: #ffc107;
+			color: #212529;
+		}
+
+		body.dark-mode .btn-danger {
+			background-color: #dc3545;
+			color: #fff;
+		}
+
+		body.dark-mode .text-muted {
+			color: #b0b0b0 !important;
+		}
+
+		body.dark-mode .text-primary {
+			color: #66b2ff !important;
+		}
+
+		body.dark-mode i.bi {
+			color: #e0e0e0;
+		}
+
+		body.dark-mode .lead,
+		body.dark-mode p,
+		body.dark-mode .dashboard-intro {
+			color: #e0e0e0 !important;
+		}
+	</style>
 </head>
 
 <body>
@@ -22,7 +115,7 @@
 						<h2 class="card-title text-primary mb-3">
 							<i class="bi bi-person-workspace"></i> Bem-vindo, <span th:text="${nome}"></span>!
 						</h2>
-						<p class="text-muted">Gerencie todos os recursos da academia com eficiência e controle total.
+						<p class="card-text">Gerencie todos os recursos da academia com eficiência e controle total.
 						</p>
 					</div>
 				</div>
@@ -87,11 +180,11 @@
 			}
 		});
 	</script>
-	
-	
+
+
 	<!-- RODAPÉ -->
 	<div th:replace="fragments/footer :: footer"></div>
-	
+
 </body>
 
 </html>

@@ -125,8 +125,7 @@ public class AlunoController {
 	}
 
 	@PostMapping("/editarAlunos/{id}")
-	public String editarAluno(@PathVariable Long id, @Valid Aluno alunoAtualizado, BindingResult result,
-			RedirectAttributes attributes) {
+	public String editarAluno(@PathVariable Long id, @Valid Aluno alunoAtualizado, BindingResult result, RedirectAttributes attributes) {
 
 		if (result.hasErrors()) {
 			attributes.addFlashAttribute("erro", "Verifique os campos...");
