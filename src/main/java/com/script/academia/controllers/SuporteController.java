@@ -1,62 +1,55 @@
 package com.script.academia.controllers;
 
-import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.script.academia.entities.MensagemSuporte;
 import com.script.academia.entities.Usuario;
-import com.script.academia.repository.MensagemSuporteRepository;
 import com.script.academia.security.UsuarioDetalhes;
+import com.script.academia.services.SuporteService;
 
 @Controller
 public class SuporteController {
 
-	@Autowired
-	private MensagemSuporteRepository suporteRepository;
+    @Autowired
+    private SuporteService suporteService;
 
-	// Método auxiliar para adicionar o nome do usuário logado ao modelo
+    private void adicionarNomeUsuario(Model model) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
+            model.addAttribute("nome", detalhes.getUsuario().getNome());
+        } catch (Exception e) {
+            model.addAttribute("nome", "Usuário");
+        }
+    }
 
-	private void adicionarNomeUsuario(Model model) {
-		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
-			model.addAttribute("nome", detalhes.getUsuario().getNome());
-		} catch (Exception e) {
-			model.addAttribute("nome", "Usuário");
-		}
-	}
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/listarSuporte")
+    public String listarMensagensDeSuporte(Model model) {
+        adicionarNomeUsuario(model);
+        model.addAttribute("mensagens", suporteService.listarTodas());
+        return "suporte/listarMensagens";
+    }
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/listarSuporte")
-	public String listarMensagensDeSuporte(Model model) {
-		adicionarNomeUsuario(model);
-		model.addAttribute("mensagens", suporteRepository.findAll());
-		return "suporte/listarMensagens";
-	}
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN', 'ALUNO')")
+    @PostMapping("/suporte/enviar")
+    public String enviarSuporte(@RequestParam("assunto") String assunto,
+                                @RequestParam("mensagem") String mensagem,
+                                RedirectAttributes attributes) {
 
-	@PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN', 'ALUNO')")
-	@PostMapping("/suporte/enviar")
-	public String enviarSuporte(@RequestParam("assunto") String assunto, @RequestParam("mensagem") String mensagem,
-			RedirectAttributes attributes) {
+        Usuario usuarioLogado = ((UsuarioDetalhes) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsuario();
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UsuarioDetalhes detalhes = (UsuarioDetalhes) auth.getPrincipal();
-		Usuario usuarioLogado = detalhes.getUsuario();
-
-		MensagemSuporte novaMensagem = new MensagemSuporte();
-		novaMensagem.setAssunto(assunto);
-		novaMensagem.setMensagem(mensagem);
-		novaMensagem.setDataEnvio(LocalDateTime.now());
-		novaMensagem.setUsuario(usuarioLogado);
-
-		suporteRepository.save(novaMensagem);
-		attributes.addFlashAttribute("Mensagem", "Sua mensagem foi enviada com sucesso!");
-		return "redirect:/suporte";
-	}
+        suporteService.enviarMensagem(assunto, mensagem, usuarioLogado);
+        attributes.addFlashAttribute("Mensagem", "Sua mensagem foi enviada com sucesso!");
+        return "redirect:/suporte";
+    }
 }
+
